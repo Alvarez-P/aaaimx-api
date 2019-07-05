@@ -6,7 +6,8 @@ const logger = require('morgan');
 const cors = require('cors');
 
 const ProfileRouter = require('../profiles/routes');
-
+const ArticleRouter = require('../articles/routes');
+const UserRouter = require('../accounts/routes');
 const app = express();
 
 // view engine setup
@@ -23,6 +24,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 app.use('/profiles', ProfileRouter);
+app.use('/articles', ArticleRouter);
+app.use('/accounts', UserRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
