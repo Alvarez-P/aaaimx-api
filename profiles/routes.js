@@ -1,29 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const connection = require('../dao/connection')
+const { registerProfile }  = require('./controllers')
 
-/* GET all profiles. */
-router.get('/', async (req, res, next) => {
-  const { Profile } = await connection()
-  console.log(Profile)
-  res.status(200).send(Profile.findAll());
-});
-
-/* GET one profile. */
-router.get('/:uuid', (req, res, next) => {
-  const uuid = req.params.uuid
-  res.status(200).send(Profile.findOne({
-    where: {
-      uuid
-    }
-  }));
-});
-
-/* POST profiles. */
-router.post('/', (req, res, next) => {
-  /**
-   * TODO:
-   */
+router.post('/registerProfile', (req, res, next) => {
+  const profile = req.body
+  registerProfile(profile).then(profile => {
+    res.status(200).send(profile);
+  }, e => {
+    res.status(500).send(e);
+  })
 });
 
 module.exports = router;
