@@ -9,14 +9,30 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: {
       type: DataTypes.STRING,
-      unique: true
+      allowNull: false
+    },
+    lastname: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+    adscription: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
     role: {
       type: DataTypes.STRING,
       allowNull: false
     },
+    extra: {
+      type: DataTypes.JSON,
+      allowNull: true
+    }
   }, {});
-  Profile.associate = function (models) {
+  Profile.associate = function(models) {
     // associations can be defined here
   };
   return Profile;

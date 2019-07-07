@@ -9,7 +9,31 @@ router.get('/', async (req, res, next) => {
   res.status(200).send(Article.findAll());
 });
 
-/* GET one article. */
+/**
+ * @api {get} /articles/:uuid Request Article information
+ * @apiName GetArticle
+ * @apiGroup Article
+ *
+ * @apiParam {String} uuid Articles unique ID.
+ *
+ * @apiSuccess {String} uuid Identifier of the Article.
+ * @apiSuccess {String} title  Title of the Article.
+ *
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "uuid": "xxxx-xxxx-xxxx-xxxx",
+ *       "title": "Image procesing with Computer Vision"
+ *     }
+ *
+ * @apiError ArticleNotFound The id of the Article was not found.
+ *
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "error": "ArticleNotFound"
+ *     }
+ */
 router.get('/:uuid', async (req, res, next) => {
   const { Article } = await connection()
   const uuid = req.params.uuid

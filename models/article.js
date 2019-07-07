@@ -9,24 +9,18 @@ module.exports = (sequelize, Sequelize) => {
     },
     title: {
       type: Sequelize.STRING,
-      unique: true,
       allowNull: false
     },
     description: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: true
     },
-    topic: {
+    type: {
       type: Sequelize.STRING,
       allowNull: false
     },
-    document: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    date_pub: {
-      type: Sequelize.DATE,
-      allowNull: false
+    year: {
+      type: Sequelize.STRING
     },
     extra: {
       type: Sequelize.JSON,
