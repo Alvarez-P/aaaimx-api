@@ -63,12 +63,21 @@ router.get('/', async (req, res, next) => {
       where: req.query
     }
   }
+  if (req.query.datatable) {
+    cond = {
+      where: req.query.query
+    }
+    if (req.query.query.generalSearch || req.query.query.generalSearch === '') {
+      cond = {}
+    }
+  }
   Profile.findAndCountAll(cond).then(profiles => {
     res.status(200).send(profiles);
   }, err => {
     console.log(err)
     res.status(500).send(ERROR_500);
   })
+
 });
 
 module.exports = router;
