@@ -2,15 +2,32 @@ const connection = require('../dao/connection')
 
 // const { encodePassword } = require('../../utils/service')
 
-async function registerProfile(profile) {
+async function createOrUpdate(profile) {
     const { Profile } = await connection()
-    const cond = {
-        where: {
-            uuid: profile.uuid
+    let cond
+    let existingProfile
+
+    if (profile.uuid) {
+        cond = {
+            where: {
+                uuid: profile.uuid
+            }
+        }
+    } else {
+        cond = {
+            where: {
+                name: profile.name,
+                lastname: profile.lastname
+            }
         }
     }
+    try {
+        existingProfile = await Profile.findOne(cond)
+    } catch (error) {
+        console.log(error)
+    }
 
-    const existingProfile = await Profile.findOne(cond)
+    console.log(profile)
 
     if (existingProfile) {
         const updated = await Profile.update(profile, cond)
@@ -22,5 +39,5 @@ async function registerProfile(profile) {
 }
 
 module.exports = {
-    registerProfile
+    createOrUpdate
 }

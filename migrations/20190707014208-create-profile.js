@@ -10,11 +10,27 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING,
-        unique: true
+        allowNull: false
+      },
+      lastname: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: true
+      },
+      adscription: {
+        type: Sequelize.STRING,
+        allowNull: false
       },
       role: {
         type: Sequelize.STRING,
         allowNull: false
+      },
+      extra: {
+        type: Sequelize.JSON,
+        allowNull: true
       },
       createdAt: {
         allowNull: false,
