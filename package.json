@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./app/bin/www",
-    "docs": "apidoc -e node_modules -o apidoc"
+    "docs": "apidoc -e node_modules -o docs"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
