@@ -4,13 +4,15 @@ const connection = require('../dao/connection')
 
 async function register(user) {
     const { User } = await connection()
-    const cond = {
-        where: {
-            uuid: user.uuid
+    let cond, existingUser
+    if (user.uuid) {
+        cond = {
+            where: {
+                uuid: user.uuid
+            }
         }
+        existingUser = await User.findOne(cond)
     }
-
-    const existingUser = await User.findOne(cond)
 
     if (existingUser) {
         const updated = await User.update(user, cond)
@@ -25,11 +27,13 @@ async function login(user) {
     const { User } = await connection()
     return User.findOne({
         where: {
-            email: user.email
+            email: user.email,
+            password: user.password
         }
     })
 }
 
 module.exports = {
-    register
+    register,
+    login
 }
