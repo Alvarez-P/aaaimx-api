@@ -170,7 +170,6 @@ router.post('/', (req, res, next) => {
 
 module.exports = router;
 
-
 router.put('/:uuid', (req, res, next) => {
   const uuid = req.params.uuid
   var profile = req.body
