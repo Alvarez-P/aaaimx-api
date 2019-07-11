@@ -4,13 +4,23 @@ const connection = require('../dao/connection')
 
 async function createOrUpdate(research) {
     const { Research } = await connection()
-    const cond = {
-        where: {
-            uuid: research.uuid
+    let cond
+    let existingResearch
+
+    if (research.uuid) {
+        cond = {
+            where: {
+                uuid: research.uuid
+            }
         }
     }
+    try {
+        existingResearch = await Research.findOne(cond)
+    } catch (error) {
+        console.log(error)
+    }
 
-    const existingResearch = await Research.findOne(cond)
+    console.log(research)
 
     if (existingResearch) {
         const updated = await Research.update(research, cond)

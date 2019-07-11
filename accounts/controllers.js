@@ -17,43 +17,44 @@ async function register(user) {
         }
         existingUser = await User.findOne(cond)
     }
-
+    user.password = await encrypt(user.password)
     if (existingUser) {
         const updated = await User.update(user, cond)
         return updated ? User.findOne(cond) : existingUser
     }
-    user.password = encrypt(user.password)
-    if (email === null || password === null) {
-        return res.status(500).send(ERROR_404);
-    } else {
-        const result = await User.create(user)
-        return result.toJSON()
-    }
+    const result = await User.create(user)
+    return result.toJSON()
 }
+
 async function login(user) {
     const { User } = await connection()
-
-    const promise = new Promise((resolve, reject) => {
-        User.findOne({
-            where: {
-                email: user.email
-            }
-        })
-        if (checkPassword(password, user.password)) return User
+    const existingUser = await User.findOne({
+        where: {
+            email: user.email
+        }
+    })
+    const match = await bcrypt.compare(user.password, existingUser.password);
+    var promise = new Promise( async (resolve, reject) => {
+        if (match)
+            resolve(existingUser)
+        else 
+            reject({ error: 'Unauthorized'})
     })
     return promise
-
 }
+
 let encrypt = (password) => {
-    return new Promise(resolve => {
-        bcrypt.hash(myPlaintextPassword, saltRounds).then(function (hash) {
+    const promise = new Promise((resolve, reject) => {
+        bcrypt.hash(password, saltRounds).then(function (hash) {
+            resolve(hash)
+        }, err => {
+            reject({
+                error: 'CannotGenerateHash'
+            })
         });
     });
+    return promise
 };
-
-let checkPassword = async (password, hash) => {
-    return bcrypt.compare(password, hash);
-}
 module.exports = {
     register,
     login

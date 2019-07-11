@@ -48,7 +48,34 @@ const ERROR_500 = {
  * */
 router.get('/', async (req, res, next) => {
   const { Research } = await connection()
-  res.status(200).send(Research.findAll());
+  console.log(req.query)
+  const offset = parseInt(req.query.offset, 10); // 
+  const limit = parseInt(req.query.limit, 10);
+  if ((offset && limit) || (offset == 0 && limit)) {
+    cond = {
+      where: {},
+      offset,
+      limit
+    }
+  } else {
+    cond = {
+      where: req.query
+    }
+  }
+  if (req.query.datatable) {
+    cond = {
+      where: req.query.query
+    }
+    if (req.query.query.generalSearch || req.query.query.generalSearch === '') {
+      cond = {}
+    }
+  }
+  Research.findAndCountAll(cond).then(researches => {
+    res.status(200).send(researches);
+  }, err => {
+    console.log(err)
+    res.status(500).send(ERROR_500);
+  })
 });
 
 /**
@@ -90,6 +117,7 @@ router.get('/:uuid', async (req, res, next) => {
   })
 });
 module.exports = router;
+
 /**
  * @api {POST} /researches/ Create new Research
  * @apiName CreateResearch
