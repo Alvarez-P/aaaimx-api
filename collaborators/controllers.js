@@ -2,39 +2,39 @@ const connection = require('../dao/connection')
 
 // const { encodePassword } = require('../../utils/service')
 
-async function createOrUpdate(profile) {
-    const { Profile } = await connection()
+async function createOrUpdate(collaborator) {
+    const { Collaborator } = await connection()
     let cond
-    let existingProfile
+    let existingCollaborator
 
-    if (profile.uuid) {
+    if (collaborator.uuid) {
         cond = {
             where: {
-                uuid: profile.uuid
+                uuid: collaborator.uuid
             }
         }
     } else {
         cond = {
             where: {
-                name: profile.name,
-                lastname: profile.lastname
+                name: collaborator.name,
+                lastname: collaborator.lastname
             }
         }
     }
     try {
-        existingProfile = await Profile.findOne(cond)
+        existingCollaborator = await Collaborator.findOne(cond)
     } catch (error) {
         console.log(error)
     }
 
-    console.log(profile)
+    console.log(collaborator)
 
-    if (existingProfile) {
-        const updated = await Profile.update(profile, cond)
-        return updated ? Profile.findOne(cond) : existingProfile
+    if (existingCollaborator) {
+        const updated = await Collaborator.update(collaborator, cond)
+        return updated ? Collaborator.findOne(cond) : existingCollaborator
     }
 
-    const result = await Profile.create(profile)
+    const result = await Collaborator.create(collaborator)
     return result.toJSON()
 }
 
