@@ -1,6 +1,7 @@
 const connection = require('../dao/connection')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+const { sign, verify } = require('./auth')
 const ERROR_404 = {
     error: "DataNotFound"
 }
@@ -15,8 +16,14 @@ async function register(user) {
                 uuid: user.uuid
             }
         }
-        existingUser = await User.findOne(cond)
+    } else {
+        cond = {
+            where: {
+                email: user.email
+            }
+        }
     }
+    existingUser = await User.findOne(cond)
     user.password = await encrypt(user.password)
     if (existingUser) {
         const updated = await User.update(user, cond)
@@ -28,17 +35,28 @@ async function register(user) {
 
 async function login(user) {
     const { User } = await connection()
-    const existingUser = await User.findOne({
-        where: {
-            email: user.email
-        }
-    })
-    const match = await bcrypt.compare(user.password, existingUser.password);
-    var promise = new Promise( async (resolve, reject) => {
-        if (match)
-            resolve(existingUser)
-        else 
-            reject({ error: 'Unauthorized'})
+    const promise = new Promise((resolve, reject) => {
+        User.findOne({
+            where: { email: user.email },
+        }).then( async (existingUser) => {
+            const match = await bcrypt.compare(user.password, existingUser.password)
+            if (match) {
+                let perms
+                if (existingUser.is_staff) {
+                    perms = ["admin", "read", "create", "update"]
+                }
+                const payload = {
+                    user: existingUser.dataValues,
+                    "permissions": perms
+                }
+                console.log(payload)
+                const token = await sign(payload, process.env.SECRET)
+                resolve(token)
+            } 
+            else  reject({ error: 'Unauthorized', status: 401 })
+        }, err => {
+            reject({ error: 'InternalServerError', status: 500 })
+        })
     })
     return promise
 }
