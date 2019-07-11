@@ -1,9 +1,9 @@
 const connection = require('../dao/connection')
-const bcrypt = require ('bcrypt'); 
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const ERROR_404 = {
     error: "DataNotFound"
-  }
+}
 // const { encodePassword } = require('../../utils/service')
 
 async function register(user) {
@@ -23,32 +23,36 @@ async function register(user) {
         return updated ? User.findOne(cond) : existingUser
     }
     user.password = encrypt(user.password)
-    if(email === null || password === null){
+    if (email === null || password === null) {
         return res.status(500).send(ERROR_404);
-    }else{ 
+    } else {
         const result = await User.create(user)
         return result.toJSON()
     }
 }
 async function login(user) {
     const { User } = await connection()
-    User.findOne({
-        where: {
-            email: user.email
-        }
+
+    const promise = new Promise((resolve, reject) => {
+        User.findOne({
+            where: {
+                email: user.email
+            }
+        })
+        if (checkPassword(password, user.password)) return User
     })
-    if (checkUser(password, user.password)) return User
+    return promise
+
 }
 let encrypt = (password) => {
     return new Promise(resolve => {
-        bcrypt.hash(myPlaintextPassword, saltRounds).then(function(hash) {
+        bcrypt.hash(myPlaintextPassword, saltRounds).then(function (hash) {
         });
     });
 };
 
- let checkUser = async (password, hash) => {
-    const match = await bcrypt.compare(password, hash);
-    return match
+let checkPassword = async (password, hash) => {
+    return bcrypt.compare(password, hash);
 }
 module.exports = {
     register,

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { registerArticle } = require('./controllers')
+const { createOrUpdate } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -8,23 +8,23 @@ const ERROR_404 = {
 const ERROR_500 = {
   error: "InternalServerError"
 }
-/* GET all articles. */
+/* GET all researches. */
 /**
- * @api {GET} /articles Get list of articles
- * @apiName GetArticles
- * @apiDescription Get list of articles that match query or pagination parameters
- * @apiGroup Article
+ * @api {GET} /researches Get list of researches
+ * @apiName GetResearches
+ * @apiDescription Get list of researches that match query or pagination parameters
+ * @apiGroup Research
  * @apiVersion 1.0.0
  * @apiExample {js} Example usage:
- *     GET http://localhost/articles // return all articles
- *     GET http://localhost/articles?uuid=Researcher // return the article with uuid equals to 'Researcher' *
- *     GET http://localhost/articles?offset=0&limit=10 // return a paginated list
+ *     GET http://localhost/researches // return all researches
+ *     GET http://localhost/researches?uuid=Research // return the Research with uuid equals to 'Researcher' *
+ *     GET http://localhost/researches?offset=0&limit=10 // return a paginated list
  * @apiParam {String} uuid Research uuid.
  * @apiParam {String} title Reseracher's title separated by comma.
- * @apiParam {String} description Description of the article.
- * @apiParam {String} type Corresponds to the type of article.
+ * @apiParam {String} description Description of the Research.
+ * @apiParam {String} type Corresponds to the type of Research.
  * @apiParam {String} year Year of publication.
- * @apiParam {JSON} extra Data additional information about the article.
+ * @apiParam {JSON} extra Data additional information about the Research.
  * @apiParam {Number} offset Pagination's offset.
  * @apiParam {Number} limit Pagination's limit.
  *
@@ -47,19 +47,19 @@ const ERROR_500 = {
  *     }
  * */
 router.get('/', async (req, res, next) => {
-  const { Article } = await connection()
-  res.status(200).send(Article.findAll());
+  const { Research } = await connection()
+  res.status(200).send(Research.findAll());
 });
 
 /**
- * @api {GET} /articles/:uuid Request Article information
- * @apiName GetArticle
- * @apiGroup Article
+ * @api {GET} /researches/:uuid Request Research information
+ * @apiName GetResearch
+ * @apiGroup Research
  *
- * @apiParam {String} uuid Articles unique ID.
+ * @apiParam {String} uuid researches unique ID.
  *
- * @apiSuccess {String} uuid Identifier of the Article.
- * @apiSuccess {String} title  Title of the Article.
+ * @apiSuccess {String} uuid Identifier of the Research.
+ * @apiSuccess {String} title  Title of the Research.
  *
  * @apiSuccessExample Success-Response:
  *     HTTP/1.1 200 OK
@@ -68,22 +68,22 @@ router.get('/', async (req, res, next) => {
  *       "title": "Image procesing with Computer Vision"
  *     }
  *
- * @apiError ArticleNotFound The id of the Article was not found.
+ * @apiError ResearchNotFound The id of the Research was not found.
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
- *       "error": "ArticleNotFound"
+ *       "error": "ResearchNotFound"
  *     }
  */
 router.get('/:uuid', async (req, res, next) => {
-  const { Article } = await connection()
+  const { Research } = await connection()
   const uuid = req.params.uuid
-  Article.findOne({ where: { uuid } }).then(article => {
-    if (!article)
+  Research.findOne({ where: { uuid } }).then(research => {
+    if (!research)
       res.status(404).send(ERROR_404)
     else
-      res.status(200).send(article)
+      res.status(200).send(research)
   }, e => {
     console.log(e)
     res.status(500).send(ERROR_500);
@@ -91,18 +91,18 @@ router.get('/:uuid', async (req, res, next) => {
 });
 module.exports = router;
 /**
- * @api {POST} /articles/ Create new Article
- * @apiName CreateArticle
- * @apiGroup Article
+ * @api {POST} /researches/ Create new Research
+ * @apiName CreateResearch
+ * @apiGroup Research
  * @apiVersion 1.0.0
  * 
- * @apiParam {String} title Reseracher's title separated by comma.
- * @apiParam {String} description Description of the article.
- * @apiParam {String} type Corresponds to the type of article.
+ * @apiParam {String} title Researcher's title separated by comma.
+ * @apiParam {String} description Description of the Research.
+ * @apiParam {String} type Corresponds to the type of Research.
  * @apiParam {String} year Year of publication.
- * @apiParam {JSON} extra Data additional information about the article.
+ * @apiParam {JSON} extra Data additional information about the Research.
  *
- * @apiSuccess {String} uuid Identifier of the Article.
+ * @apiSuccess {String} uuid Identifier of the Research.
  * @apiSuccess {String} title Research's title(s).
  *
  * @apiSuccessExample Success-Response:
@@ -122,9 +122,9 @@ module.exports = router;
  *     }
  */
 router.post('/', (req, res, next) => {
-  const article = req.body
-  registerArticle(article).then(article => {
-    res.status(200).send(article);
+  const research = req.body
+  createOrUpdate(research).then(research => {
+    res.status(200).send(research);
   }, e => {
     res.status(500).send('Internal Server Error');
   })
@@ -132,11 +132,11 @@ router.post('/', (req, res, next) => {
 
 module.exports = router;
 
-/* PUT articles listing. */
+/* PUT researches listing. */
 router.put('/', (req, res, next) => {
-  const article = req.body
-  registerArticle(article).then(article => {
-    res.status(200).send(article);
+  const research = req.body
+  createOrUpdate(research).then(research => {
+    res.status(200).send(research);
   }, e => {
     res.status(500).send('Internal Server Error');
   })
