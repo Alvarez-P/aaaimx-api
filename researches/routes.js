@@ -151,6 +151,7 @@ module.exports = router;
  */
 router.post('/', (req, res, next) => {
   const research = req.body
+  console.log(req.headers)
   createOrUpdate(research).then(research => {
     res.status(200).send(research);
   }, e => {

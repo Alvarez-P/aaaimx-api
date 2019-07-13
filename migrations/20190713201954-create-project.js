@@ -1,32 +1,24 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Collaborators', {
+    return queryInterface.createTable('Projects', {
       uuid: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false
+      title: {
+        type: Sequelize.STRING
       },
-      lastname: {
-        type: Sequelize.STRING,
-        allowNull: false
+      institute: {
+        type: Sequelize.STRING
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: true
+      start: {
+        type: Sequelize.DATE
       },
-      adscription: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      role: {
-        type: Sequelize.STRING,
-        allowNull: true
+      end: {
+        type: Sequelize.DATE
       },
       extra: {
         type: Sequelize.JSON,
@@ -43,6 +35,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Collaborators');
+    return queryInterface.dropTable('Projects');
   }
 };

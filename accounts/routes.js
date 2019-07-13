@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { register, login }  = require('./controllers')
+const { register, login } = require('./controllers')
 const auth = require('express-jwt')
 const guard = require('express-jwt-permissions')()
 
@@ -16,11 +16,15 @@ router.post('/login', (req, res, next) => {
 
 router.post('/register', guard.check(["admin", "read", "create", "update"]), (req, res, next) => {
   const user = req.body
-  register(user).then(user => {
-    res.status(201).send(user);
-  }, e => {
-    res.status(500).send({ error: 'InternalServerError'});
-  })
+  if (user.email.trim() && user.password.trim()) {
+    register(user).then(user => {
+      res.status(201).send(user);
+    }, e => {
+      res.status(500).send({ error: 'InternalServerError' });
+    })
+  } else {
+    res.status(409).send({ error: 'BadRequest' });
+  }
 });
 
 module.exports = router;
