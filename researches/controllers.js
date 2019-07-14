@@ -6,21 +6,19 @@ async function createOrUpdate(research) {
     const { Research } = await connection()
     let cond
     let existingResearch
-
+    console.log(research)
     if (research.uuid) {
         cond = {
             where: {
                 uuid: research.uuid
             }
         }
+        try {
+            existingResearch = await Research.findOne(cond)
+        } catch (error) {
+            console.log(error)
+        }
     }
-    try {
-        existingResearch = await Research.findOne(cond)
-    } catch (error) {
-        console.log(error)
-    }
-
-    console.log(research)
 
     if (existingResearch) {
         const updated = await Research.update(research, cond)
