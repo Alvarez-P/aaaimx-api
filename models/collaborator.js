@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Collaborator.associate = function(models) {
-    Collaborator.hasOne(models.Adscription, {foreignKey: 'adscription', sourceKey: 'institute'});
+    Collaborator.hasOne(models.Partner, {foreignKey: 'adscription', sourceKey: 'institute'});
   };
   return Collaborator;
 };
