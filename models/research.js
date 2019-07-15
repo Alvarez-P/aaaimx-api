@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
-  const Article = sequelize.define('Article', {
+  const Research = sequelize.define('Research', {
     uuid: {
       allowNull: false,
       primaryKey: true,
@@ -27,8 +27,8 @@ module.exports = (sequelize, Sequelize) => {
       allowNull: true
     }
   }, {});
-  Article.associate = function (models) {
+  Research.associate = function (models) {
     // associations can be defined here
   };
-  return Article;
+  return Research;
 };

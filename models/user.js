@@ -1,12 +1,18 @@
 'use strict';
-
 module.exports = (sequelize, Sequelize) => {
-  var User = sequelize.define('User', {
-  uuid: {
+  const User = sequelize.define('User', {
+    uuid: {
       allowNull: false,
       primaryKey: true,
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4
+    },
+    username: {
+      type: Sequelize.STRING
+    },
+    is_staff: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     },
     email: {
       type: Sequelize.STRING,
@@ -16,12 +22,9 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
       allowNull: false
     },
-  }, {
-    classMethods: {
-      associate: (models) => {
-        // associations can be defined here
-      }
-    }
-  });
+  }, {});
+  User.associate = function(models) {
+    // associations can be defined here
+  };
   return User;
 };

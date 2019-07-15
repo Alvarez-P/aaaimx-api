@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Articles', {
+    return queryInterface.createTable('Projects', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -9,19 +9,16 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4
       },
       title: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: true
-      },
-      type: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      year: {
         type: Sequelize.STRING
+      },
+      institute: {
+        type: Sequelize.STRING
+      },
+      start: {
+        type: Sequelize.DATE
+      },
+      end: {
+        type: Sequelize.DATE
       },
       extra: {
         type: Sequelize.JSON,
@@ -38,6 +35,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Articles');
+    return queryInterface.dropTable('Projects');
   }
 };
