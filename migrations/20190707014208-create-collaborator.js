@@ -20,10 +20,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true
       },
-      adscription: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
       active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true

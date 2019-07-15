@@ -1,16 +1,18 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('adscriptions', {
-      id: {
+    return queryInterface.createTable('Adscriptions', {
+      uuid: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
-      institute: {
-        type: Sequelize.STRING
+      sc_partner: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       },
+      institute: Sequelize.STRING,
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -22,6 +24,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('adscriptions');
+    return queryInterface.dropTable('Adscriptions');
   }
 };

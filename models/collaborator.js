@@ -19,10 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true
     },
-    adscription: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true
@@ -33,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   Collaborator.associate = function(models) {
-    // associations can be defined here
+    Collaborator.hasOne(models.Adscription, {foreignKey: 'adscription', sourceKey: 'institute'});
   };
   return Collaborator;
 };
