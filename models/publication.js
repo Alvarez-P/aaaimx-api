@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const publication = sequelize.define('publication', {
+  const Publication = sequelize.define('Publication', {
     uuid: {
       allowNull: false,
       primaryKey: true,
@@ -12,8 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     pub_type: DataTypes.STRING
   }, {});
-  publication.associate = function(models) {
+  Publication.associate = function(models) {
     // associations can be defined here
   };
-  return publication;
+  return Publication;
 };

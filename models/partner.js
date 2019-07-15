@@ -1,18 +1,20 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
-  const Thesis = sequelize.define('Thesis', {
+  const Adscription = sequelize.define('Adscription', {
     uuid: {
       allowNull: false,
       primaryKey: true,
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4
     },
-    grade: {
-      type: Sequelize.STRING
-    }
+    sc_partner: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    institute: Sequelize.STRING
   }, {});
-  Thesis.associate = function(models) {
+  Adscription.associate = function(models) {
     // associations can be defined here
   };
-  return Thesis;
+  return Adscription;
 };

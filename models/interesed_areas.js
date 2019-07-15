@@ -1,6 +1,6 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const interesed_areas = sequelize.define('interesed_areas', {
+module.exports = (sequelize, Sequelize) => {
+  const InteresedAreas = sequelize.define('InterestArea', {
     id: {
       allowNull: false,
       primaryKey: true,
@@ -9,10 +9,13 @@ module.exports = (sequelize, DataTypes) => {
     topic: {
       type: Sequelize.STRING
     },
-    category: DataTypes.STRING
+    category: {
+      type: Sequelize.STRING,
+      allowNull: true
+    }
   }, {});
-  interesed_areas.associate = function(models) {
+  InteresedAreas.associate = function(models) {
     // associations can be defined here
   };
-  return interesed_areas;
+  return InteresedAreas;
 };

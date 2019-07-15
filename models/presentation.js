@@ -1,16 +1,16 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const presentation = sequelize.define('presentation', {
+module.exports = (sequelize, Sequelize) => {
+  const Presentation = sequelize.define('Presentation', {
     uuid: {
       allowNull: false,
       primaryKey: true,
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4
     },
-    event: DataTypes.STRING
+    event: { type: Sequelize.STRING }
   }, {});
-  presentation.associate = function(models) {
+  Presentation.associate = function(models) {
     // associations can be defined here
   };
-  return presentation;
+  return Presentation;
 };
