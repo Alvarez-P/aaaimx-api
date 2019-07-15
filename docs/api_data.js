@@ -174,11 +174,126 @@ define({ "api": [
   },
   {
     "type": "GET",
+<<<<<<< HEAD
+    "url": "/articles",
+    "title": "Get list of articles",
+    "name": "GetArticles",
+    "description": "<p>Get list of articles that match query or pagination parameters</p>",
+    "group": "Article",
+    "version": "1.0.0",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "GET http://localhost/articles // return all articles\nGET http://localhost/articles?uuid=Researcher // return the article with uuid equals to 'Researcher' *\nGET http://localhost/articles?offset=0&limit=10 // return a paginated list",
+        "type": "js"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "uuid",
+            "description": "<p>Research uuid.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "title",
+            "description": "<p>Reseracher's title separated by comma.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "description",
+            "description": "<p>Description of the article.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "type",
+            "description": "<p>Corresponds to the type of article.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "year",
+            "description": "<p>Year of publication.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "JSON",
+            "optional": false,
+            "field": "extra",
+            "description": "<p>Data additional information about the article.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "offset",
+            "description": "<p>Pagination's offset.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Number",
+            "optional": false,
+            "field": "limit",
+            "description": "<p>Pagination's limit.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"count\": 10,\n  \"rows\": [\n     ...\n   ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Bad Request</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Error-Response:",
+          "content": "HTTP/1.1 500 Internal Server Error\n{\n  \"error\": \"InternalServerError\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "./articles/routes.js",
+    "groupTitle": "Article"
+  },
+  {
+    "type": "POST",
+    "url": "/profiles/",
+    "title": "Create new Profile",
+    "name": "CreateProfile",
+    "group": "Profile",
+=======
     "url": "/collaborators",
     "title": "Get list of collaborators",
     "name": "GetCollaborators",
     "description": "<p>Get list of collaborators that match query or pagination parameters</p>",
     "group": "Collaborator",
+>>>>>>> e53a9c1948f782972675a8df2353d29ebad44d13
     "version": "1.0.0",
     "examples": [
       {
@@ -544,8 +659,13 @@ define({ "api": [
         }
       ]
     },
+<<<<<<< HEAD
+    "filename": "./profiles/routes.js",
+    "groupTitle": "Profile"
+=======
     "filename": "./researches/routes.js",
     "groupTitle": "Research"
+>>>>>>> e53a9c1948f782972675a8df2353d29ebad44d13
   },
   {
     "success": {
@@ -571,8 +691,13 @@ define({ "api": [
     "url": "",
     "version": "0.0.0",
     "filename": "./docs/main.js",
+<<<<<<< HEAD
+    "group": "_home_alvarez_adolfo_Documentos_Programacion_NODE_JS_aaaimx_api_aaaimx_api_docs_main_js",
+    "groupTitle": "_home_alvarez_adolfo_Documentos_Programacion_NODE_JS_aaaimx_api_aaaimx_api_docs_main_js",
+=======
     "group": "_home_rnovelo_Desktop_AAAI_Chapter_aaaimx_api_docs_main_js",
     "groupTitle": "_home_rnovelo_Desktop_AAAI_Chapter_aaaimx_api_docs_main_js",
+>>>>>>> e53a9c1948f782972675a8df2353d29ebad44d13
     "name": ""
   }
 ] });
