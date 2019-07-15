@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
-  const Adscription = sequelize.define('Adscription', {
+  const Partner = sequelize.define('Partner', {
     uuid: {
       allowNull: false,
       primaryKey: true,
@@ -13,8 +13,8 @@ module.exports = (sequelize, Sequelize) => {
     },
     institute: Sequelize.STRING
   }, {});
-  Adscription.associate = function(models) {
+  Partner.associate = function(models) {
     // associations can be defined here
   };
-  return Adscription;
+  return Partner;
 };
