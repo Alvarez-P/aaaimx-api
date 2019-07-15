@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Profile = sequelize.define('Profile', {
+  const Collaborator = sequelize.define('Collaborator', {
     uuid: {
       allowNull: false,
       primaryKey: true,
@@ -23,17 +23,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
-    role: {
-      type: DataTypes.STRING,
-      allowNull: false
+    active: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true
     },
     extra: {
       type: DataTypes.JSON,
       allowNull: true
     }
   }, {});
-  Profile.associate = function(models) {
+  Collaborator.associate = function(models) {
     // associations can be defined here
   };
-  return Profile;
+  return Collaborator;
 };

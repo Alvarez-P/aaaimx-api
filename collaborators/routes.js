@@ -10,15 +10,15 @@ const ERROR_500 = {
 }
 
 /**
- * @api {GET} /profiles Get list of profiles
- * @apiName GetProfiles
- * @apiDescription Get list of profiles that match query or pagination parameters
- * @apiGroup Profile
+ * @api {GET} /collaborators Get list of collaborators
+ * @apiName GetCollaborators
+ * @apiDescription Get list of collaborators that match query or pagination parameters
+ * @apiGroup Collaborator
  * @apiVersion 1.0.0
  * @apiExample {js} Example usage:
- *     GET http://localhost/profiles // return all profiles
- *     GET http://localhost/profiles?role=Researcher // return all profile with role equals to 'Researcher'
- *     GET http://localhost/profiles?offset=0&limit=10 // return a paginated list
+ *     GET http://localhost/collaborators // return all collaborators
+ *     GET http://localhost/collaborators?role=Researcher // return all Collaborator with role equals to 'Researcher'
+ *     GET http://localhost/collaborators?offset=0&limit=10 // return a paginated list
  *
  * @apiParam {String} name Research's name(s).
  * @apiParam {String} lastname Reseracher's lastname separated by comma.
@@ -47,7 +47,7 @@ const ERROR_500 = {
  *     }
  */
 router.get('/', async (req, res, next) => {
-  const { Profile } = await connection()
+  const { Collaborator } = await connection()
   let cond = {}
   console.log(req.query)
   const offset = parseInt(req.query.offset, 10); // 
@@ -71,8 +71,8 @@ router.get('/', async (req, res, next) => {
       cond = {}
     }
   }
-  Profile.findAndCountAll(cond).then(profiles => {
-    res.status(200).send(profiles);
+  Collaborator.findAndCountAll(cond).then(collaborators => {
+    res.status(200).send(collaborators);
   }, err => {
     console.log(err)
     res.status(500).send(ERROR_500);
@@ -83,14 +83,14 @@ router.get('/', async (req, res, next) => {
 module.exports = router;
 
 /**
- * @api {GET} /profiles/:uuid Request Profile information
- * @apiName GetProfile
- * @apiGroup Profile
+ * @api {GET} /collaborators/:uuid Request Collaborator information
+ * @apiName GetCollaborator
+ * @apiGroup Collaborator
  * @apiVersion 1.0.0
  *
- * @apiParam {String} uuid Profile identifier
+ * @apiParam {String} uuid Collaborator identifier
  *
- * @apiSuccess {String} uuid Identifier of the Profile.
+ * @apiSuccess {String} uuid Identifier of the Collaborator.
  * @apiSuccess {String} name Research's name(s).
  *
  * @apiSuccessExample Success-Response:
@@ -101,22 +101,22 @@ module.exports = router;
  *        ...
  *     }
  *
- * @apiError ProfileNotFound Resource does not exist
+ * @apiError CollaboratorNotFound Resource does not exist
  *
  * @apiErrorExample Error-Response:
  *     HTTP/1.1 404 Not Found
  *     {
- *       "error": "ProfileNotFound"
+ *       "error": "CollaboratorNotFound"
  *     }
  */
 router.get('/:uuid', async (req, res, next) => {
-  const { Profile } = await connection()
+  const { Collaborator } = await connection()
   const uuid = req.params.uuid
-  Profile.findOne({ where: { uuid } }).then(profile => {
-    if (!profile)
+  Collaborator.findOne({ where: { uuid } }).then(collaborator => {
+    if (!collaborator)
       res.status(404).send(ERROR_404)
     else
-      res.status(200).send(profile)
+      res.status(200).send(collaborator)
   }, e => {
     console.log(e)
     res.status(500).send(ERROR_500);
@@ -127,9 +127,9 @@ module.exports = router;
 
 
 /**
- * @api {POST} /profiles/ Create new Profile
- * @apiName CreateProfile
- * @apiGroup Profile
+ * @api {POST} /collaborators/ Create new Collaborator
+ * @apiName CreateCollaborator
+ * @apiGroup Collaborator
  * @apiVersion 1.0.0
  *
  * @apiParam {String} name Research's name(s).
@@ -137,9 +137,9 @@ module.exports = router;
  * @apiParam {String} email Valid email address.
  * @apiParam {String} adscription Institute origin.
  * @apiParam {String} role Student/Researcher/Teacher/Advisor.
- * @apiParam {JSON} extra Profile extra data in JSON format.
+ * @apiParam {JSON} extra Collaborator extra data in JSON format.
  *
- * @apiSuccess {String} uuid Identifier of the Profile.
+ * @apiSuccess {String} uuid Identifier of the Collaborator.
  * @apiSuccess {String} name Research's name(s).
  *
  * @apiSuccessExample Success-Response:
@@ -159,9 +159,9 @@ module.exports = router;
  *     }
  */
 router.post('/', (req, res, next) => {
-  const profile = req.body
-  createOrUpdate(profile).then(profile => {
-    res.status(201).send(profile);
+  const collaborator = req.body
+  createOrUpdate(collaborator).then(collaborator => {
+    res.status(201).send(collaborator);
   }, e => {
     console.log(e)
     res.status(500).send(ERROR_500);
@@ -172,10 +172,10 @@ module.exports = router;
 
 router.put('/:uuid', (req, res, next) => {
   const uuid = req.params.uuid
-  var profile = req.body
-  profile.uuid = uuid
-  createOrUpdate(profile).then(profile => {
-    res.status(200).send(profile);
+  var collaborator = req.body
+  collaborator.uuid = uuid
+  createOrUpdate(collaborator).then(collaborator => {
+    res.status(200).send(collaborator);
   }, e => {
     console.log(e)
     res.status(500).send(ERROR_500);

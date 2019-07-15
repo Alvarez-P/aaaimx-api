@@ -4,9 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
-
-const ProfileRouter = require('../profiles/routes');
-const ArticleRouter = require('../articles/routes');
+const jwt = require('express-jwt');
+const { SECRET_TOKEN, WHITE_LIST } = require('./config')
+const CollaboratorRouter = require('../collaborators/routes');
+const ProjectRouter = require('../projects/routes');
+const ResearchRouter = require('../researches/routes');
 const UserRouter = require('../accounts/routes');
 const app = express();
 
@@ -22,9 +24,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app middlewares
 app.use(cors())
-
-app.use('/profiles', ProfileRouter);
-app.use('/articles', ArticleRouter);
+app.use(jwt({
+  secret: SECRET_TOKEN
+}).unless({ method: 'GET', path: WHITE_LIST }));
+app.use('/projects', ProjectRouter);
+app.use('/collaborators', CollaboratorRouter);
+app.use('/researches', ResearchRouter);
 app.use('/accounts', UserRouter);
 
 // catch 404 and forward to error handler

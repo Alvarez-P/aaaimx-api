@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Profiles', {
+    return queryInterface.createTable('Collaborators', {
       uuid: {
         allowNull: false,
         primaryKey: true,
@@ -24,9 +24,9 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      role: {
-        type: Sequelize.STRING,
-        allowNull: false
+      active: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true
       },
       extra: {
         type: Sequelize.JSON,
@@ -43,6 +43,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Profiles');
+    return queryInterface.dropTable('Collaborators');
   }
 };
