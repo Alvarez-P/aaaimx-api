@@ -44,9 +44,13 @@ module.exports = async function connection(setup) {
     Role.belongsToMany(Collaborator, { as: 'Roles', through: 'CollaboratorRoles' });
     Collaborator.belongsToMany(Role, { through: 'CollaboratorRoles' });
 
-    /** Association Reseach-Authors M:M **/
+    /** Association Research-Authors M:M **/
     Research.belongsToMany(Collaborator, { as: 'Authors', through: 'ResearchAuthors' });
     Collaborator.belongsToMany(Research, { as: 'Researches', through: 'ResearchAuthors' });
+
+    /** Association Research-Advisors M:M **/
+    Research.belongsToMany(Collaborator, { as: 'Advisors', through: 'ResearchAdvisors' });
+    Collaborator.belongsToMany(Research, { as: 'Theses', through: 'ResearchAdvisors' });
 
     /** Association Project-InterestArea M:M **/
     Project.belongsToMany(InterestArea, { as: 'InterestAreas', through: 'ProjectLines' });

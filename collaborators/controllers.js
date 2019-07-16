@@ -42,6 +42,16 @@ async function createOrUpdate(collaborator) {
     return existingCollaborator.dataValues
 }
 
+async function getCollaborators(collaborators) {
+    for (let index = 0; index < collaborators.length; index++) {
+        let coll = collaborators[index]
+        console.log(coll)
+        coll.dataValues.roles = await coll.getRoles();
+    }
+    return collaborators
+}
+
 module.exports = {
-    createOrUpdate
+    createOrUpdate,
+    getCollaborators
 }

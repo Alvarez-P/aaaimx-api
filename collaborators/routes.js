@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate } = require('./controllers')
+const { createOrUpdate, getCollaborators } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -71,8 +71,12 @@ router.get('/', async (req, res, next) => {
       cond = {}
     }
   }
-  Collaborator.findAndCountAll(cond).then(collaborators => {
-    res.status(200).send(collaborators);
+  Collaborator.findAndCountAll(cond).then( async (collaborators) => {
+    const colls = await getCollaborators(collaborators.rows)
+    res.status(200).send({
+      count: collaborators.count,
+      rows: colls
+    });
   }, err => {
     console.log(err)
     res.status(500).send(ERROR_500);
