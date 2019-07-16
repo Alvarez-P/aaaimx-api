@@ -53,42 +53,11 @@ app.use((err, req, res, next) => {
 const connection = require('../dao/connection')
 
 async function test() {
-  const { Collaborator, Partner } = await connection()
-  let coll = {
-    name: 'Mauricio Gabriel',
-    lastname: 'Orozco-del-Castillo',
-    active: true,
-    Adscription: {
-      institute: 'Tecnológico Nacional de México / I.T. Mérida'
-    },
-  }
-  let coll2 = {
-    name: 'Raul Aarmin',
-    lastname: 'Novelo-Cruz',
-    active: true,
-    Adscription: {
-      institute: 'Tecnológico Nacional de México / I.T. Mérida'
-    },
-  }
-
-  let itm = {
-    institute: 'Tecnológico Nacional de México / I.T. Mérida',
-    sc_partner: false
-  }
-  const cond = {
-    where: {
-      name: coll.name,
-      lastname: coll.lastname
-    }
-  }
-  console.log(p)
-  if (!p)
-    p = await Partner.create(itm)
-  else
-    p = await Partner.update(p, { where: itm })
-
-  
-
+  const { Partner } = await connection()
+  const partner = await Partner.findOne({where: { institute: 'Tecnológico Nacional de México / I.T. Mérida'}})
+  const colls = await partner.getColls()
+  console.log(colls)
 }
+
 
 module.exports = app;

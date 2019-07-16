@@ -58,10 +58,10 @@ router.get('/:uuid', async (req, res, next) => {
 module.exports = router;
 
 router.post('/', (req, res, next) => {
-  const research = req.body
+  const project = req.body
   console.log(req.headers)
-  createOrUpdate(research).then(research => {
-    res.status(200).send(research);
+  createOrUpdate(project).then(project => {
+    res.status(200).send(project);
   }, e => {
     res.status(500).send('Internal Server Error');
   })
@@ -71,9 +71,9 @@ module.exports = router;
 
 /* PUT researches listing. */
 router.put('/', (req, res, next) => {
-  const research = req.body
-  createOrUpdate(research).then(research => {
-    res.status(200).send(research);
+  const project = req.body
+  createOrUpdate(project).then(project => {
+    res.status(200).send(project);
   }, e => {
     res.status(500).send('Internal Server Error');
   })

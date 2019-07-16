@@ -1,11 +1,6 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
   const InteresedAreas = sequelize.define('InterestArea', {
-    id: {
-      allowNull: false,
-      primaryKey: true,
-      type: Sequelize.INTEGER
-    },
     topic: {
       type: Sequelize.STRING
     },
