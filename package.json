@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./app/bin/www",
+    "db:setup": "node ./dao/setup",
     "docs": "apidoc -e node_modules -o docs"
   },
   "dependencies": {

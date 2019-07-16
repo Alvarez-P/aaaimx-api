@@ -1,35 +1,36 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Collaborator = sequelize.define('Collaborator', {
+module.exports = (sequelize, Sequelize) => {
+  class Collaborator extends Sequelize.Model { }
+  Collaborator.init({
     uuid: {
       allowNull: false,
       primaryKey: true,
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4
     },
     name: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     lastname: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: false
     },
     email: {
-      type: DataTypes.STRING,
+      type: Sequelize.STRING,
       allowNull: true
     },
     active: {
-      type: DataTypes.BOOLEAN,
+      type: Sequelize.BOOLEAN,
       defaultValue: true
     },
     extra: {
-      type: DataTypes.JSON,
+      type: Sequelize.JSON,
       allowNull: true
     }
-  }, {});
-  Collaborator.associate = function(models) {
-    Collaborator.hasOne(models.Partner, {foreignKey: 'adscription', sourceKey: 'institute'});
-  };
+  }, {
+    sequelize,
+    modelName: 'Collaborator'
+  });
   return Collaborator;
 };

@@ -10,9 +10,6 @@ module.exports = (sequelize, Sequelize) => {
     title: {
       type: Sequelize.STRING
     },
-    institute: {
-      type: Sequelize.STRING
-    },
     start: {
       type: Sequelize.DATE
     },

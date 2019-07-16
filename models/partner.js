@@ -1,20 +1,16 @@
 'use strict';
 module.exports = (sequelize, Sequelize) => {
-  const Partner = sequelize.define('Partner', {
-    uuid: {
+  class Partner extends Sequelize.Model { }
+  Partner.init({
+    institute: {
       allowNull: false,
       primaryKey: true,
-      type: Sequelize.UUID,
-      defaultValue: Sequelize.UUIDV4
+      type: Sequelize.STRING
     },
     sc_partner: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
-    },
-    institute: Sequelize.STRING
-  }, {});
-  Partner.associate = function(models) {
-    // associations can be defined here
-  };
+    }
+  }, { sequelize, modelName: 'Partner' });
   return Partner;
 };

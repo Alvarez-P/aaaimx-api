@@ -1,12 +1,9 @@
 const connection = require('../dao/connection')
 
-// const { encodePassword } = require('../../utils/service')
-
 async function createOrUpdate(collaborator) {
-    const { Collaborator } = await connection()
-    let cond
-    let existingCollaborator
-
+    const { Collaborator, Partner, Role } = await connection()
+    let cond, existingCollaborator, existingPartner, partner = null
+    console.log(collaborator)
     if (collaborator.uuid) {
         cond = {
             where: {
@@ -21,21 +18,28 @@ async function createOrUpdate(collaborator) {
             }
         }
     }
-    try {
-        existingCollaborator = await Collaborator.findOne(cond)
-    } catch (error) {
-        console.log(error)
-    }
+    existingPartner = await Partner.findOne({ where: collaborator.Adscription })
+    existingCollaborator = await Collaborator.findOne(cond)
 
-    console.log(collaborator)
+    if (existingPartner)
+        partner = existingPartner
+    else
+        partner = await Partner.create(collaborator.Adscription)
 
-    if (existingCollaborator) {
-        const updated = await Collaborator.update(collaborator, cond)
-        return updated ? Collaborator.findOne(cond) : existingCollaborator
-    }
+    if (existingCollaborator)
+        await Collaborator.update(collaborator, cond)
+    else
+        existingCollaborator = await Collaborator.create(collaborator)
 
-    const result = await Collaborator.create(collaborator)
-    return result.toJSON()
+    existingCollaborator.setPartner(partner)
+    collaborator.Roles.forEach(async (role) => {
+        let new_role = await Role.findOne({ where: { name: role } })
+        if (!new_role) {
+            new_role = await Role.create({ name: role })
+        }
+        await existingCollaborator.addRole(new_role)
+    });
+    return existingCollaborator.dataValues
 }
 
 module.exports = {
