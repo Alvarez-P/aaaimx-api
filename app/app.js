@@ -48,4 +48,16 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
+
+
+const connection = require('../dao/connection')
+
+async function test() {
+  const { Partner } = await connection()
+  const partner = await Partner.findOne({where: { institute: 'Tecnológico Nacional de México / I.T. Mérida'}})
+  const colls = await partner.getColls()
+  console.log(colls)
+}
+
+
 module.exports = app;

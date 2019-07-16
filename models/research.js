@@ -22,6 +22,22 @@ module.exports = (sequelize, Sequelize) => {
     year: {
       type: Sequelize.STRING
     },
+    pub_in:{
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    pub_type: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    event: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
+    grade: {
+      type: Sequelize.STRING,
+      allowNull: true
+    },
     extra: {
       type: Sequelize.JSON,
       allowNull: true

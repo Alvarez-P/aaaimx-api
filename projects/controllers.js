@@ -1,34 +1,47 @@
 const connection = require('../dao/connection')
 
-// const { encodePassword } = require('../../utils/service')
-
-async function createOrUpdate(research) {
-    const { Research } = await connection()
-    let cond
-    let existingResearch
-
-    if (research.uuid) {
+async function createOrUpdate(project) {
+    const { Project, Partner, Collaborator, InterestArea } = await connection()
+    let cond, existingProject, existingPartner, partner, in_charge = null
+    console.log(project)
+    if (project.uuid) { 
         cond = {
             where: {
-                uuid: research.uuid
+                uuid: project.uuid
+            }
+        }
+    } else {
+        cond = {
+            where: {
+                title: project.title
             }
         }
     }
-    try {
-        existingResearch = await Research.findOne(cond)
-    } catch (error) {
-        console.log(error)
-    }
+    existingProject = await Project.findOne(cond)
+    existingPartner = await Partner.findOne({ where: project.Adscription })
+    in_charge = await Collaborator.findOne({ where: project.InCharge })
+    if (existingPartner)
+        partner = existingPartner
+    else
+        partner = await Partner.create(project.Adscription)
+        
+    
+    if (existingProject)
+        await Project.update(project, cond)
+    else
+        existingProject = await Project.create(project)
+    
+    await existingProject.setPartner(partner)
+    await existingProject.setResponsible(in_charge)
 
-    console.log(research)
-
-    if (existingResearch) {
-        const updated = await Research.update(research, cond)
-        return updated ? Research.findOne(cond) : existingResearch
-    }
-
-    const result = await Research.create(research)
-    return result.toJSON()
+    project.Topics.forEach(async (topic) => {
+        let line = await InterestArea.findOne({ where: { topic } })
+        if (!line) {
+            line = await InterestArea.create({ topic })
+        }
+        await existingProject.addInterestArea(line)
+    });
+    return existingProject.dataValues
 }
 
 module.exports = {
