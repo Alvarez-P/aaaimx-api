@@ -34,7 +34,7 @@ app.use('/projects', ProjectRouter);
 app.use('/collaborators', CollaboratorRouter);
 app.use('/researches', ResearchRouter);
 app.use('/accounts', UserRouter);
-app.use('/partner', PartnerRouter);
+app.use('/partners', PartnerRouter);
 app.use('/research_lines', ResearchLineRouter)
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

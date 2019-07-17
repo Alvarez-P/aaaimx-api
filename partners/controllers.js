@@ -1,8 +1,8 @@
 const connection = require('../dao/connection')
 
 async function createOrUpdate(partner) {
-    const { Partner, Role } = await connection() // modelos involucrados en el proceso
-    let cond, existingPartner, partner // inicializar banderas
+    const { Partner } = await connection() // modelos involucrados en el proceso
+    let cond, existingPartner // inicializar banderas
     
     if (partner.institute) { // existe entonces debemos buscar por uuid
         cond = {
@@ -12,15 +12,15 @@ async function createOrUpdate(partner) {
         }
     } 
 
-    existingPartner = await Partner.findOne({ where: partner.Adscription }) // la adscripcion debe venir el body como un objeto
-
     // si no existe lo creamos y lo asigno a mi variable de modelo Partner
-    if (existingPartner)
-        partner = existingPartner
-    else
-        partner = await Partner.create(partner.Adscription)
-}
+    if (existingPartner) {
+        const updated = await Partner.update(partner, cond)
+        return updated ? Partner.findOne(cond) : existingPartner
+    }
 
+    const result = await Partner.create(partner)
+    return result.toJSON()
+}
 async function getPartners(partners) {
     for (let index = 0; index < partners.length; index++) {
         let coll = partners[index]
