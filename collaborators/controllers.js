@@ -60,7 +60,7 @@ async function getCollaborators(collaborators) {
         console.log(coll)
         coll.dataValues.roles = await coll.getRoles();
         coll.dataValues.projects = await coll.getProjects();
-        coll.dataValues.researchs = await coll.getResearchs();
+        coll.dataValues.researchs = await coll.getResearches();
     }
     return collaborators
 }

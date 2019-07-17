@@ -61,3 +61,48 @@ router.post('/', (req, res, next) => {
   });
   
   module.exports = router;
+
+  router.get('/:id', async (req, res, next) => {
+    const { InterestArea } = await connection()
+    const id = req.params.id
+    InterestArea.findOne({ where: { id } }).then(interestArea => {
+      if (!interestArea)
+        res.status(404).send(ERROR_404)
+      else
+        res.status(200).send(interestArea)
+    }, e => {
+      console.log(e)
+      res.status(500).send(ERROR_500);
+    })
+  });
+  module.exports = router;
+
+  router.get('/:topic', async (req, res, next) => {
+    const { InterestArea } = await connection()
+    const topic = req.params.topic
+    InterestArea.findOne({ where: { topic } }).then(interestArea => {
+      if (!interestArea)
+        res.status(404).send(ERROR_404)
+      else
+        res.status(200).send(interestArea)
+    }, e => {
+      console.log(e)
+      res.status(500).send(ERROR_500);
+    })
+  });
+  module.exports = router;
+
+  router.delete('/:id', async (req, res, next) => {
+    const { InterestArea } = await connection()
+    const id = req.params.id
+    InterestArea.findOne({ where: { id } }).then(interestArea => {
+      if (!interestArea)
+        res.status(404).send(ERROR_404)
+      else
+        res.status(200).send(interestArea)
+    }, e => {
+      console.log(e)
+      res.status(500).send(ERROR_500);
+    })
+  });
+  module.exports = router;

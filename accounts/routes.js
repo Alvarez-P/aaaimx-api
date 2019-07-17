@@ -45,3 +45,19 @@ router.get('/:email', async (req, res, next) => {
   })
 });
 module.exports = router;
+
+
+router.delete('/:uuid', async (req, res, next) => {
+  const { User } = await connection()
+  const uuid = req.params.uuid
+  User.findOne({ where: { uuid } }).then(user => {
+    if (!user)
+      res.status(404).send(ERROR_404)
+    else
+      res.status(200).send(user)
+  }, e => {
+    console.log(e)
+    res.status(500).send(ERROR_500);
+  })
+});
+module.exports = router;
