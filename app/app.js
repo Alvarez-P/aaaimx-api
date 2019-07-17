@@ -10,6 +10,8 @@ const CollaboratorRouter = require('../collaborators/routes');
 const ProjectRouter = require('../projects/routes');
 const ResearchRouter = require('../researches/routes');
 const UserRouter = require('../accounts/routes');
+const PartnerRouter = require('../partners/routes')
+const ResearchLineRouter = require('../research_lines/routes')
 const app = express();
 
 // view engine setup
@@ -27,11 +29,13 @@ app.use(cors())
 app.use(jwt({
   secret: SECRET_TOKEN
 }).unless({ method: 'GET', path: WHITE_LIST }));
+
 app.use('/projects', ProjectRouter);
 app.use('/collaborators', CollaboratorRouter);
 app.use('/researches', ResearchRouter);
 app.use('/accounts', UserRouter);
-
+app.use('/partner', PartnerRouter);
+app.use('/research_lines', ResearchLineRouter)
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));

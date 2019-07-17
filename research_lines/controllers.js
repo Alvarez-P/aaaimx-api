@@ -5,16 +5,16 @@ const connection = require('../dao/connection')
 async function createOrUpdate(interesedAreas) {
     const { InteresedAreas } = await connection()
     let cond
-    let existingResearch
+    let existingResearchLine
     console.log(interesedAreas)
-    if (interesedAreas.uuid) {
+    if (interesedAreas.topic) {
         cond = {
             where: {
-                uuid: interesedAreas.uuid
+                uuid: interesedAreas.topic
             }
         }
         try {
-            existingResearch = await InteresedAreas.findOne(cond)
+            existingResearchLine = await InteresedAreas.findOne(cond)
         } catch (error) {
             console.log(error)
         }
@@ -22,13 +22,24 @@ async function createOrUpdate(interesedAreas) {
 
     if (existingResearch) {
         const updated = await InteresedAreas.update(interesedAreas, cond)
-        return updated ? InteresedAreas.findOne(cond) : existingResearch
+        return updated ? InteresedAreas.findOne(cond) : existingResearchLine
     }
 
     const result = await InteresedAreas.create(interesedAreas)
     return result.toJSON()
 }
 
+async function getInterestAreas(interesedAreas) {
+    for (let index = 0; index < interesedAreas.length; index++) {
+        let coll = interesedAreas[index]
+        console.log(coll)
+        coll.dataValues.projects = await coll.getProjects();
+        coll.dataValues.researchs = await coll.getResearchs();
+    }
+    return interesestAreas
+}
+
 module.exports = {
-    createOrUpdate
+    createOrUpdate,
+    getInterestAreas
 }
