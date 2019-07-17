@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate, getResearchLine } = require('./controllers')
+const { createOrUpdate, getInterestArea } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -35,7 +35,7 @@ router.get('/', async (req, res, next) => {
       }
     }
     InterestArea.findAndCountAll(cond).then( async (interestArea) => {
-      const colls = await getInterestAreas(interestArea.rows)
+      const colls = await getInterestArea(interestArea.rows)
       res.status(200).send({
         count: interestArea.count,
         rows: colls

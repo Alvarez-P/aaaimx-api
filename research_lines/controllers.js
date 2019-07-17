@@ -29,17 +29,17 @@ async function createOrUpdate(interesedAreas) {
     return result.toJSON()
 }
 
-async function getInterestAreas(interesedAreas) {
+async function getInterestArea(interesedAreas) {
     for (let index = 0; index < interesedAreas.length; index++) {
         let coll = interesedAreas[index]
         console.log(coll)
         coll.dataValues.projects = await coll.getProjects();
-        coll.dataValues.researchs = await coll.getResearchs();
+        coll.dataValues.researchs = await coll.getResearches();
     }
-    return interesestAreas
+    return interesedAreas
 }
 
 module.exports = {
     createOrUpdate,
-    getInterestAreas
+    getInterestArea
 }
