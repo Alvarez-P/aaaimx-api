@@ -2,30 +2,26 @@ const connection = require('../dao/connection')
 
 // const { encodePassword } = require('../../utils/service')
 
-async function createOrUpdate(interesedAreas) {
+async function createOrUpdate(line) {
     const { InteresedAreas } = await connection()
     let cond
     let existingResearchLine
-    console.log(interesedAreas)
-    if (interesedAreas.topic) {
+
+    if (line.topic) {
         cond = {
             where: {
-                uuid: interesedAreas.topic
+                topic: line.topic
             }
         }
-        try {
-            existingResearchLine = await InteresedAreas.findOne(cond)
-        } catch (error) {
-            console.log(error)
-        }
     }
+    existingResearchLine = await InteresedAreas.findOne(cond)
 
     if (existingResearch) {
-        const updated = await InteresedAreas.update(interesedAreas, cond)
+        const updated = await InteresedAreas.update(line, cond)
         return updated ? InteresedAreas.findOne(cond) : existingResearchLine
     }
 
-    const result = await InteresedAreas.create(interesedAreas)
+    const result = await InteresedAreas.create(line)
     return result.toJSON()
 }
 
