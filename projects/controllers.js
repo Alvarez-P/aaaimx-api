@@ -24,13 +24,13 @@ async function createOrUpdate(project) {
         partner = existingPartner
     else
         partner = await Partner.create(project.Adscription)
-        
-    
+
+
     if (existingProject)
         await Project.update(project, cond)
     else
         existingProject = await Project.create(project)
-    
+
     await existingProject.setPartner(partner)
     await existingProject.setResponsible(in_charge)
 

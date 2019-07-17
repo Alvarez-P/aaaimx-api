@@ -38,6 +38,7 @@ async function createOrUpdate(collaborator) {
     existingCollaborator.setPartner(partner)
 
     // por ultimo le toca a los roles
+    await existingCollaborator.setRoles([])
     collaborator.Roles.forEach(async (role) => { // por cada role igual hay que preguntar, buscar y/o crear
         let new_role = await Role.findOne({ where: { name: role } })
         if (!new_role) {
@@ -58,6 +59,8 @@ async function getCollaborators(collaborators) {
         let coll = collaborators[index]
         console.log(coll)
         coll.dataValues.roles = await coll.getRoles();
+        coll.dataValues.projects = await coll.getProjects();
+        coll.dataValues.researchs = await coll.getResearchs();
     }
     return collaborators
 }

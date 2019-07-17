@@ -4,22 +4,24 @@ async function createOrUpdate(partner) {
     const { Partner } = await connection() // modelos involucrados en el proceso
     let cond, existingPartner // inicializar banderas
     
+
     if (partner.institute) { // existe entonces debemos buscar por uuid
         cond = {
             where: {
-                uuid: partner.institute
+                institute: partner.institute
             }
         }
-    } 
+    }
+    existingPartner = await Partner.findOne(cond)
 
-    // si no existe lo creamos y lo asigno a mi variable de modelo Partner
     if (existingPartner) {
         const updated = await Partner.update(partner, cond)
-        return updated ? Partner.findOne(cond) : existingPartner
+        return updated ? Partner.findOne(cond) : existingResearchLine
     }
 
     const result = await Partner.create(partner)
     return result.toJSON()
+
 }
 async function getPartners(partners) {
     for (let index = 0; index < partners.length; index++) {
