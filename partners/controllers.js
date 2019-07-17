@@ -3,22 +3,23 @@ const connection = require('../dao/connection')
 async function createOrUpdate(partner) {
     const { Partner } = await connection() // modelos involucrados en el proceso
     let cond, existingPartner // inicializar banderas
-    
+
     if (partner.institute) { // existe entonces debemos buscar por uuid
         cond = {
             where: {
                 institute: partner.institute
             }
         }
-    } 
+    }
+    existingPartner = await Partner.findOne(cond)
 
-    existingPartner = await Partner.findOne(cond) 
+    if (existingPartner) {
+        const updated = await Partner.update(partner, cond)
+        return updated ? Partner.findOne(cond) : existingResearchLine
+    }
 
-    if (existingPartner)
-        partner = await Partner.update(partner, cond) 
-    else
-        partner = await Partner.create(partner)
-    return partner
+    const result = await Partner.create(partner)
+    return result.toJSON()
 }
 
 async function getPartners(partners) {
