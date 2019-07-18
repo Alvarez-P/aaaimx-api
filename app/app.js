@@ -12,6 +12,7 @@ const ResearchRouter = require('../researches/routes');
 const UserRouter = require('../accounts/routes');
 const PartnerRouter = require('../partners/routes')
 const ResearchLineRouter = require('../research_lines/routes')
+const RoleRouter = require('../roles/routes')
 const app = express();
 
 // view engine setup
@@ -34,8 +35,9 @@ app.use('/projects', ProjectRouter);
 app.use('/collaborators', CollaboratorRouter);
 app.use('/researches', ResearchRouter);
 app.use('/accounts', UserRouter);
-app.use('/partner', PartnerRouter);
+app.use('/partners', PartnerRouter);
 app.use('/research_lines', ResearchLineRouter)
+app.use('/roles', RoleRouter)
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));
@@ -62,6 +64,5 @@ async function test() {
   const colls = await partner.getColls()
   console.log(colls)
 }
-
 
 module.exports = app;

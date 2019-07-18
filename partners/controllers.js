@@ -3,6 +3,7 @@ const connection = require('../dao/connection')
 async function createOrUpdate(partner) {
     const { Partner } = await connection() // modelos involucrados en el proceso
     let cond, existingPartner // inicializar banderas
+    
 
     if (partner.institute) { // existe entonces debemos buscar por uuid
         cond = {
@@ -20,8 +21,8 @@ async function createOrUpdate(partner) {
 
     const result = await Partner.create(partner)
     return result.toJSON()
-}
 
+}
 async function getPartners(partners) {
     for (let index = 0; index < partners.length; index++) {
         let coll = partners[index]

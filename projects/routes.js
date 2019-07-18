@@ -80,3 +80,18 @@ router.put('/', (req, res, next) => {
 });
 
 module.exports = router;
+
+router.delete('/:uuid', async (req, res, next) => {
+  const { Research } = await connection()
+  const uuid = req.params.uuid
+  Research.findOne({ where: { uuid } }).then(research => {
+    if (!research)
+      res.status(404).send(ERROR_404)
+    else
+      res.status(200).send(research)
+  }, e => {
+    console.log(e)
+    res.status(500).send(ERROR_500);
+  })
+});
+module.exports = router;
