@@ -29,12 +29,12 @@ module.exports = async function connection(setup) {
     Project.belongsTo(Collaborator, { as: 'Responsible', constraints: true, foreignKey: 'in_charge' });
 
     /** Association Partner-Collaborator 1:M **/
-    Partner.hasMany(Collaborator, { as: 'Colls', constraints: true, foreignKey: 'adscription', sourceKey: 'uuid' });
-    Collaborator.belongsTo(Partner, { as: 'Adscription', constraints: true, foreignKey: 'adscription', sourceKey: 'uuid' });
+    Partner.hasMany(Collaborator, { as: 'Colls', constraints: true, foreignKey: 'adscription' });
+    Collaborator.belongsTo(Partner, { as: 'Adscription', constraints: true, foreignKey: 'adscription' });
 
     /** Association Partner-Project 1:M **/
-    Partner.hasMany(Project, { as: 'Projects', constraints: true, foreignKey: 'institute', sourceKey: 'uuid' });
-    Project.belongsTo(Partner, { as: 'Institute', constraints: true, foreignKey: 'institute', sourceKey: 'uuid' });
+    Partner.hasMany(Project, { as: 'Projects', constraints: true, foreignKey: 'institute' });
+    Project.belongsTo(Partner, { as: 'Institute', constraints: true, foreignKey: 'institute' });
 
     /** Association Project-Research M:M **/
     Project.belongsToMany(Research, { as: 'Researches', through: 'ProjectResearch' });
