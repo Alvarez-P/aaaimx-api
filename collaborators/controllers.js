@@ -21,6 +21,7 @@ async function createOrUpdate(collaborator) {
     existingPartner = await Partner.findOne({ where: collaborator.Adscription }) // la adscripcion debe venir el body como un objeto
     existingCollaborator = await Collaborator.findOne(cond) // buscamos al colaborador
 
+    
     // si no existe lo creamos y lo asigno a mi variable de modelo Partner
     if (existingPartner)
         partner = existingPartner
@@ -35,7 +36,7 @@ async function createOrUpdate(collaborator) {
 
     // a cualquier de los dos le asignó su adscription
     // el metodo setPartner() me lo brinda sequelize con la asociación
-    existingCollaborator.setPartner(partner)
+    existingCollaborator.setAdscription(partner)
 
     // por ultimo le toca a los roles
     await existingCollaborator.setRoles([])

@@ -5,7 +5,13 @@ async function createOrUpdate(partner) {
     let cond, existingPartner // inicializar banderas
     
 
-    if (partner.institute) { // existe entonces debemos buscar por uuid
+    if (partner.uuid) { // existe entonces debemos buscar por uuid
+        cond = {
+            where: {
+                uuid: partner.uuid
+            }
+        }
+    } else {
         cond = {
             where: {
                 institute: partner.institute

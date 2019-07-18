@@ -38,22 +38,26 @@ async function login(user) {
     const promise = new Promise((resolve, reject) => {
         User.findOne({
             where: { email: user.email },
-        }).then( async (existingUser) => {
-            const match = await bcrypt.compare(user.password, existingUser.password)
-            if (match) {
-                let perms
-                if (existingUser.is_staff) {
-                    perms = ["admin", "read", "create", "update"]
+        }).then(async (existingUser) => {
+            if (existingUser) {
+                const match = await bcrypt.compare(user.password, existingUser.password)
+                if (match) {
+                    let perms
+                    if (existingUser.is_staff) {
+                        perms = ["admin", "read", "create", "update"]
+                    }
+                    const payload = {
+                        user: existingUser.dataValues,
+                        "permissions": perms
+                    }
+                    console.log(payload)
+                    const token = await sign(payload, process.env.SECRET)
+                    resolve(token)
                 }
-                const payload = {
-                    user: existingUser.dataValues,
-                    "permissions": perms
-                }
-                console.log(payload)
-                const token = await sign(payload, process.env.SECRET)
-                resolve(token)
-            } 
-            else  reject({ error: 'Unauthorized', status: 401 })
+                else reject({ error: 'Unauthorized', status: 401 })
+            } else {
+                reject({ error: 'Unauthorized', status: 401 })
+            }
         }, err => {
             reject({ error: 'InternalServerError', status: 500 })
         })
