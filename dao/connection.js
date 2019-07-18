@@ -29,20 +29,20 @@ module.exports = async function connection(setup) {
     Project.belongsTo(Collaborator, { as: 'Responsible', constraints: true, foreignKey: 'in_charge' });
 
     /** Association Partner-Collaborator 1:M **/
-    Partner.hasMany(Collaborator, { as: 'Colls', constraints: true, foreignKey: 'adscription', sourceKey: 'institute' });
-    Collaborator.belongsTo(Partner, { constraints: true, foreignKey: 'adscription', sourceKey: 'institute' });
+    Partner.hasMany(Collaborator, { as: 'Colls', constraints: true, foreignKey: 'adscription' });
+    Collaborator.belongsTo(Partner, { as: 'Adscription', constraints: true, foreignKey: 'adscription' });
 
     /** Association Partner-Project 1:M **/
-    Partner.hasMany(Project, { as: 'Projects', constraints: true, foreignKey: 'institute', sourceKey: 'institute' });
-    Project.belongsTo(Partner, { constraints: true, foreignKey: 'institute', sourceKey: 'institute' });
+    Partner.hasMany(Project, { as: 'Projects', constraints: true, foreignKey: 'institute' });
+    Project.belongsTo(Partner, { as: 'Institute', constraints: true, foreignKey: 'institute' });
 
     /** Association Project-Research M:M **/
     Project.belongsToMany(Research, { as: 'Researches', through: 'ProjectResearch' });
     Research.belongsToMany(Project, { through: 'ProjectResearch' });
 
     /** Association Collaborator-Role M:M **/
-    Role.belongsToMany(Collaborator, { as: 'Roles', through: 'CollaboratorRoles' });
-    Collaborator.belongsToMany(Role, { through: 'CollaboratorRoles' });
+    Role.belongsToMany(Collaborator, { through: 'CollaboratorRoles' });
+    Collaborator.belongsToMany(Role, { as: 'Roles', through: 'CollaboratorRoles' });
 
     /** Association Research-Authors M:M **/
     Research.belongsToMany(Collaborator, { as: 'Authors', through: 'ResearchAuthors' });
