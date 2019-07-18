@@ -16,7 +16,7 @@ async function createOrUpdate(partner) {
 
     if (existingPartner) {
         const updated = await Partner.update(partner, cond)
-        return updated ? Partner.findOne(cond) : existingResearchLine
+        return updated ? Partner.findOne(cond) : existingPartner
     }
 
     const result = await Partner.create(partner)
@@ -28,6 +28,7 @@ async function getPartners(partners) {
         let coll = partners[index]
         console.log(coll)
         coll.dataValues.projects = await coll.getProjects();
+        coll.dataValues.collaborators = await coll.getColls();
     }
     return partners
 }

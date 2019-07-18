@@ -116,18 +116,19 @@ module.exports = router;
 router.get('/:uuid', async (req, res, next) => {
   const { Collaborator } = await connection()
   const uuid = req.params.uuid
-  Collaborator.findOne({ where: { uuid } }).then(collaborator => {
-    if (!collaborator)
-      res.status(404).send(ERROR_404)
-    else
-      res.status(200).send(collaborator)
-  }, e => {
-    console.log(e)
+  Collaborator.findOne({ where: { uuid } }).then(async (collaborators) => {
+    const colls = await getCollaborators(collaborators.rows)
+    res.status(200).send({
+      count: collaborators.count,
+      rows: colls
+    });
+  }, err => {
+    console.log(err)
     res.status(500).send(ERROR_500);
   })
+
 });
 
-module.exports = router;
 
 
 /**

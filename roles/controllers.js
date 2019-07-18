@@ -29,7 +29,7 @@ async function getRole(role) {
     for (let index = 0; index < role.length; index++) {
         let coll = role[index]
         console.log(coll)
-        coll.dataValues.projects = await coll.getRoles();
+        coll.dataValues.collaborators = await coll.getRoles();
     }
     return role
 }
