@@ -3,7 +3,7 @@ const connection = require('../dao/connection')
 async function createOrUpdate(collaborator) {
     const { Collaborator, Partner, Role } = await connection() // modelos involucrados en el proceso
     let cond, existingCollaborator, existingPartner, partner // inicializar banderas
-    
+
     if (collaborator.uuid) { // existe entonces debemos buscar por uuid
         cond = {
             where: {
@@ -13,15 +13,14 @@ async function createOrUpdate(collaborator) {
     } else { // es nuevo? checamos que no exista uno con mismo nombre y apellido
         cond = {
             where: {
-                name: collaborator.name,
-                lastname: collaborator.lastname
+                fullname: collaborator.fullname
             }
         }
     }
     existingPartner = await Partner.findOne({ where: collaborator.Adscription }) // la adscripcion debe venir el body como un objeto
     existingCollaborator = await Collaborator.findOne(cond) // buscamos al colaborador
 
-    
+
     // si no existe lo creamos y lo asigno a mi variable de modelo Partner
     if (existingPartner)
         partner = existingPartner
@@ -56,20 +55,17 @@ async function createOrUpdate(collaborator) {
  * @param {Array} collaborators 
  */
 async function getCollaborators(collaborators) {
-    const { Partner } = await connection()
     for (let index = 0; index < collaborators.length; index++) {
         let coll = collaborators[index]
-        console.log(coll)
         let roles = await coll.getRoles();
-        let roles1 = []
-        roles.forEach((element,index, array) => {
-            roles1.push(element.name)
-          });
-        coll.dataValues.roles = roles1;
+        coll.dataValues.roles = []
+        roles.forEach((element) => {
+            coll.dataValues.roles.push(element.name)
+        });
         coll.dataValues.projects = await coll.getProjects();
         coll.dataValues.researches = await coll.getResearches();
-        let ads = await Partner.findOne({ where: collaborators.Adscription })
-        coll.dataValues.adscription = ads["institute"]
+        let adscription = await coll.getAdscription()
+        coll.dataValues.adscription = adscription ? adscription.institute : null
     }
     return collaborators
 }

@@ -2,8 +2,7 @@ const connection = require('../dao/connection')
 
 async function createOrUpdate(project) {
     const { Project, Partner, Collaborator, InterestArea } = await connection()
-    let cond, existingProject, existingPartner, partner, in_charge = null
-    console.log(project)
+    let cond, existingProject, existingPartner, partner, in_charge
     if (project.uuid) { 
         cond = {
             where: {
@@ -25,13 +24,15 @@ async function createOrUpdate(project) {
     else
         partner = await Partner.create(project.Adscription)
 
-
+    if (!in_charge)
+        in_charge = await Collaborator.create(project.InCharge)
+        
     if (existingProject)
         await Project.update(project, cond)
     else
         existingProject = await Project.create(project)
 
-    await existingProject.setPartner(partner)
+    await existingProject.setInstitute(partner)
     await existingProject.setResponsible(in_charge)
 
     project.Topics.forEach(async (topic) => {
