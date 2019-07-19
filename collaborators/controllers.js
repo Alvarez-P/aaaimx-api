@@ -1,5 +1,5 @@
 const connection = require('../dao/connection')
-
+const classification = require('../researches/classification')
 async function createOrUpdate(collaborator) {
     const { Collaborator, Partner, Role } = await connection() // modelos involucrados en el proceso
     let cond, existingCollaborator, existingPartner, partner // inicializar banderas
@@ -63,17 +63,13 @@ async function getCollaborators(collaborators) {
             coll.dataValues.roles.push(element.name)
         });
         coll.dataValues.projects = await coll.getProjects();
+
         let researches = await coll.getResearches();
-        let t = ["thesis", "tesis"], pu = ["publication", "publicacion", "publicación"], pre = ["presentation", "presentacion", "presentación"]
-        let thesis = [], pub = [], presentation = []
-        researches.forEach((element) => {
-            if(t.includes(element.type.toLowerCase())) thesis.push(element)
-            if(pu.includes(element.type.toLowerCase())) pub.push(element)
-            if(pre.includes(element.type.toLowerCase())) presentation.push(element)
-        });
-        coll.dataValues.researches_thesis = thesis
-        coll.dataValues.researches_publication = pub 
-        coll.dataValues.researches_presentation = presentation 
+        let researches1 = await classification(researches)
+        coll.dataValues.r_theses = researches1[0]
+        coll.dataValues.r_publications = researches1[1]
+        coll.dataValues.r_presentation = researches1[2] 
+
         let adscription = await coll.getAdscription()
         coll.dataValues.adscription = adscription ? adscription.institute : null
     }
