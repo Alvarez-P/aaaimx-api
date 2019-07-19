@@ -68,7 +68,8 @@ async function getCollaborators(collaborators) {
         coll.dataValues.roles = roles1;
         coll.dataValues.projects = await coll.getProjects();
         coll.dataValues.researches = await coll.getResearches();
-        coll.dataValues.adscription = await Partner.findOne({ where: collaborators.Adscription })
+        let ads = await Partner.findOne({ where: collaborators.Adscription })
+        coll.dataValues.adscription = ads["institute"]
     }
     return collaborators
 }
