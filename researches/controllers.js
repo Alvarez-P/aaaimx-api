@@ -68,7 +68,7 @@ async function getResearches(researches) {
         let coll = researches[index]
         console.log(coll)
         coll.dataValues.projects = await coll.getProjects();
-        coll.dataValues.researchs = await coll.getAuthors();
+        coll.dataValues.authors = await coll.getAuthors();
         coll.dataValues.advisors = await coll.getAdvisors();
 
     }

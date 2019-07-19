@@ -63,7 +63,17 @@ async function getCollaborators(collaborators) {
             coll.dataValues.roles.push(element.name)
         });
         coll.dataValues.projects = await coll.getProjects();
-        coll.dataValues.researches = await coll.getResearches();
+        let researches = await coll.getResearches();
+        let t = ["thesis", "tesis"], pu = ["publication", "publicacion", "publicación"], pre = ["presentation", "presentacion", "presentación"]
+        let thesis = [], pub = [], presentation = []
+        researches.forEach((element) => {
+            if(t.includes(element.type.toLowerCase())) thesis.push(element)
+            if(pu.includes(element.type.toLowerCase())) pub.push(element)
+            if(pre.includes(element.type.toLowerCase())) presentation.push(element)
+        });
+        coll.dataValues.researches_thesis = thesis
+        coll.dataValues.researches_publication = pub 
+        coll.dataValues.researches_presentation = presentation 
         let adscription = await coll.getAdscription()
         coll.dataValues.adscription = adscription ? adscription.institute : null
     }
