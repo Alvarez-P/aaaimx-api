@@ -11,19 +11,36 @@ const ERROR_500 = {
 router.get('/:institute', async (req, res, next) => {
   const { Partner } = await connection()
   const institute = req.params.institute
-  Partner.findOne({ where: { institute } }).then(partner => {
-    if (!partner)
-      res.status(404).send(ERROR_404)
-    else
-      res.status(200).send(partner)
-  }, e => {
-    console.log(e)
+  Partner.findOne({ where: { institute } }).then(async (partners) => {
+    const colls = await getPartners(partners.rows)
+    res.status(200).send({
+      count: partners.count,
+      rows: colls
+    });
+  }, err => {
+    console.log(err)
     res.status(500).send(ERROR_500);
   })
+
 });
 module.exports = router;
 
+router.get('/:uuid', async (req, res, next) => {
+  const { Partner } = await connection()
+  const uuid = req.params.uuid
+  Partner.findOne({ where: { uuid } }).then(async (partners) => {
+    const colls = await getPartners(partners.rows)
+    res.status(200).send({
+      count: partners.count,
+      rows: colls
+    });
+  }, err => {
+    console.log(err)
+    res.status(500).send(ERROR_500);
+  })
 
+});
+module.exports = router;
 
 router.get('/', async (req, res, next) => {
     const { Partner } = await connection()

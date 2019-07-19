@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate, getInterestArea } = require('./controllers')
+const { createOrUpdate, getResearchLines } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -35,7 +35,7 @@ router.get('/', async (req, res, next) => {
       }
     }
     InterestArea.findAndCountAll(cond).then( async (interestArea) => {
-      const colls = await getInterestArea(interestArea.rows)
+      const colls = await getResearchLines(interestArea.rows)
       res.status(200).send({
         count: interestArea.count,
         rows: colls
@@ -65,30 +65,35 @@ router.post('/', (req, res, next) => {
   router.get('/:id', async (req, res, next) => {
     const { InterestArea } = await connection()
     const id = req.params.id
-    InterestArea.findOne({ where: { id } }).then(interestArea => {
-      if (!interestArea)
-        res.status(404).send(ERROR_404)
-      else
-        res.status(200).send(interestArea)
-    }, e => {
-      console.log(e)
+    InterestArea.findOne({ where: { id } }).then(async (interestArea) => {
+      const colls = await getResearchLines(interestArea.rows)
+      res.status(200).send({
+        count: interestArea.count,
+        rows: colls
+      });
+    }, err => {
+      console.log(err)
       res.status(500).send(ERROR_500);
     })
+  
   });
+  
   module.exports = router;
 
   router.get('/:topic', async (req, res, next) => {
     const { InterestArea } = await connection()
     const topic = req.params.topic
-    InterestArea.findOne({ where: { topic } }).then(interestArea => {
-      if (!interestArea)
-        res.status(404).send(ERROR_404)
-      else
-        res.status(200).send(interestArea)
-    }, e => {
-      console.log(e)
+    InterestArea.findOne({ where: { topic } }).then(async (interestArea) => {
+      const colls = await getResearchLines(interestArea.rows)
+      res.status(200).send({
+        count: interestArea.count,
+        rows: colls
+      });
+    }, err => {
+      console.log(err)
       res.status(500).send(ERROR_500);
     })
+  
   });
   module.exports = router;
 

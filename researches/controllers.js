@@ -63,6 +63,19 @@ async function createOrUpdate(research) {
     return existingResearch.dataValues
 }
 
+async function getResearches(researches) {
+    for (let index = 0; index < researches.length; index++) {
+        let coll = researches[index]
+        console.log(coll)
+        coll.dataValues.projects = await coll.getProjects();
+        coll.dataValues.researchs = await coll.getAuthors();
+        coll.dataValues.advisors = await coll.getAdvisors();
+
+    }
+    return researches
+}
+
 module.exports = {
-    createOrUpdate
+    createOrUpdate,
+    getResearches
 }

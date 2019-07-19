@@ -44,6 +44,23 @@ async function createOrUpdate(project) {
     return existingProject.dataValues
 }
 
+async function getProjects(projects) {
+    for (let index = 0; index < projects.length; index++) {
+        let coll = projects[index]
+        console.log(coll)
+        coll.dataValues.responsible = await coll.getResponsible();
+        coll.dataValues.institute = await coll.getInstitute();
+        coll.dataValues.researches = await coll.getResearches();
+        let interestArea = await coll.getInterestAreas();
+        let interestArea1 = []
+        interestArea.forEach((element,index, array) => {
+            interestArea1.push(element.topic)
+          });
+        coll.dataValues.interest_area = interestArea1
+    }
+    return projects
+}
 module.exports = {
-    createOrUpdate
+    createOrUpdate,
+    getProjects
 }

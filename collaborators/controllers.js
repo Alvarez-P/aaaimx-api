@@ -56,12 +56,19 @@ async function createOrUpdate(collaborator) {
  * @param {Array} collaborators 
  */
 async function getCollaborators(collaborators) {
+    const { Partner } = await connection()
     for (let index = 0; index < collaborators.length; index++) {
         let coll = collaborators[index]
         console.log(coll)
-        coll.dataValues.roles = await coll.getRoles();
+        let roles = await coll.getRoles();
+        let roles1 = []
+        roles.forEach((element,index, array) => {
+            roles1.push(element.name)
+          });
+        coll.dataValues.roles = roles1;
         coll.dataValues.projects = await coll.getProjects();
-        coll.dataValues.researchs = await coll.getResearches();
+        coll.dataValues.researches = await coll.getResearches();
+        coll.dataValues.adscription = await Partner.findOne({ where: collaborators.Adscription })
     }
     return collaborators
 }
