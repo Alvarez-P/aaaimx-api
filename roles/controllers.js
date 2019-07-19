@@ -16,7 +16,7 @@ async function createOrUpdate(role) {
     }
     existingRole = await Role.findOne(cond)
 
-    if (existingResearch) {
+    if (existingRole) {
         const updated = await Role.update(role, cond)
         return updated ? Role.findOne(cond) : existingRole
     }
@@ -25,13 +25,13 @@ async function createOrUpdate(role) {
     return result.toJSON()
 }
 
-async function getRole(role) {
-    for (let index = 0; index < role.length; index++) {
-        let coll = role[index]
+async function getRole(roles) {
+    for (let index = 0; index < roles.length; index++) {
+        let coll = roles[index]
         console.log(coll)
-        coll.dataValues.collaborators = await coll.getRoles();
+        coll.dataValues.collaborators = await coll.getCollaborators();
     }
-    return role
+    return roles
 }
 
 module.exports = {

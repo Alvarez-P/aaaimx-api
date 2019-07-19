@@ -65,15 +65,17 @@ router.post('/', (req, res, next) => {
   router.get('/:id', async (req, res, next) => {
     const { Role } = await connection()
     const id = req.params.id
-    Role.findOne({ where: { id } }).then(role => {
-      if (!role)
-        res.status(404).send(ERROR_404)
-      else
-        res.status(200).send(role)
-    }, e => {
-      console.log(e)
+    Role.findOne({ where: { id } }).then(async (role) => {
+      const colls = await getRole(role.rows)
+      res.status(200).send({
+        count: role.count,
+        rows: colls
+      });
+    }, err => {
+      console.log(err)
       res.status(500).send(ERROR_500);
     })
+  
   });
   module.exports = router;
 

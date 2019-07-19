@@ -61,10 +61,11 @@ async function getCollaborators(collaborators) {
         let coll = collaborators[index]
         console.log(coll)
         let roles = await coll.getRoles();
+        let roles1 = []
         roles.forEach((element,index, array) => {
-            array.push(element.name)
+            roles1.push(element.name)
           });
-        coll.dataValues.roles = roles.splice(1, 1);;
+        coll.dataValues.roles = roles1;
         coll.dataValues.projects = await coll.getProjects();
         coll.dataValues.researches = await coll.getResearches();
         coll.dataValues.adscription = await Partner.findOne({ where: collaborators.Adscription })

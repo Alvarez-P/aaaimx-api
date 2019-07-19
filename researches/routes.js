@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate } = require('./controllers')
+const { createOrUpdate, getResearches } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -70,13 +70,19 @@ router.get('/', async (req, res, next) => {
       cond = {}
     }
   }
-  Research.findAndCountAll(cond).then(researches => {
-    res.status(200).send(researches);
+  Research.findAndCountAll(cond).then(async (researches) => {
+    const colls = await getResearches(researches.rows)
+    res.status(200).send({
+      count: researches.count,
+      rows: colls
+    });
   }, err => {
     console.log(err)
     res.status(500).send(ERROR_500);
   })
+
 });
+module.exports = router
 
 /**
  * @api {GET} /researches/:uuid Request Research information
@@ -106,15 +112,17 @@ router.get('/', async (req, res, next) => {
 router.get('/:uuid', async (req, res, next) => {
   const { Research } = await connection()
   const uuid = req.params.uuid
-  Research.findOne({ where: { uuid } }).then(research => {
-    if (!research)
-      res.status(404).send(ERROR_404)
-    else
-      res.status(200).send(research)
-  }, e => {
-    console.log(e)
+  Research.findOne({ where: { uuid } }).then(async (researches) => {
+    const colls = await getResearches(researches.rows)
+    res.status(200).send({
+      count: researches.count,
+      rows: colls
+    });
+  }, err => {
+    console.log(err)
     res.status(500).send(ERROR_500);
   })
+
 });
 module.exports = router;
 

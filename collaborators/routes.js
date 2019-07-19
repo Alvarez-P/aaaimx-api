@@ -129,7 +129,7 @@ router.get('/:uuid', async (req, res, next) => {
 
 });
 
-
+module.exports = router
 
 /**
  * @api {POST} /collaborators/ Create new Collaborator
