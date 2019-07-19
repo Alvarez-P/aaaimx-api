@@ -49,9 +49,22 @@ async function getProjects(projects) {
     for (let index = 0; index < projects.length; index++) {
         let coll = projects[index]
         console.log(coll)
-        coll.dataValues.responsible = await coll.getResponsible();
-        coll.dataValues.institute = await coll.getInstitute();
-        coll.dataValues.researches = await coll.getResearches();
+        let responsible = await coll.getResponsible()
+        coll.dataValues.responsible = responsible ? responsible.fullname : null
+        let institute = await coll.getInstitute()
+        coll.dataValues.institute = institute ? institute.institute : null
+        let researches = await coll.getResearches();
+        let t = ["thesis", "tesis"], pu = ["publication", "publicacion", "publicación"], pre = ["presentation", "presentacion", "presentación"]
+        let thesis = [], pub = [], presentation = []
+        researches.forEach((element) => {
+            if(t.includes(element.type.toLowerCase())) thesis.push(element)
+            if(pu.includes(element.type.toLowerCase())) pub.push(element)
+            if(pre.includes(element.type.toLowerCase())) presentation.push(element)
+        });
+        coll.dataValues.r_theses = thesis 
+        coll.dataValues.r_publications = pub 
+        coll.dataValues.r_presentation = presentation 
+        
         let interestArea = await coll.getInterestAreas();
         let interestArea1 = []
         interestArea.forEach((element,index, array) => {
