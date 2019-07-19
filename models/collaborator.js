@@ -8,11 +8,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4
     },
-    name: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    lastname: {
+    fullname: {
       type: Sequelize.STRING,
       allowNull: false
     },
@@ -22,7 +18,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     active: {
       type: Sequelize.BOOLEAN,
-      defaultValue: true
+      defaultValue: false
     },
     extra: {
       type: Sequelize.JSON,
