@@ -192,10 +192,7 @@ module.exports = router;
 router.delete('/:uuid', async (req, res, next) => {
   const { Collaborator } = await connection()
   const uuid = req.params.uuid
-  Collaborator.findOne({ where: { uuid } }).then(collaborator => {
-    if (!collaborator)
-      res.status(404).send(ERROR_404)
-    else
+  Collaborator.destroy({ where: { uuid } }).then(collaborator => {
       res.status(200).send(collaborator)
   }, e => {
     console.log(e)

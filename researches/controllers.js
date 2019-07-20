@@ -66,7 +66,7 @@ async function getResearches(researches) {
         coll.dataValues.projects = await coll.getProjects();
         coll.dataValues.authors = await coll.getAuthors();
         coll.dataValues.advisors = await coll.getAdvisors();
-
+        coll.dataValues.lines = await coll.getInterestAreas();
     }
     return researches
 }
