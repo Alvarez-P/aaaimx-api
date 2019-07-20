@@ -4,8 +4,8 @@ const connection = require('../dao/connection')
 
 async function createOrUpdate(research) {
     const { Project, Research, Collaborator, InterestArea } = await connection()
-    let cond, existingResearch, existingProject, project = null
-    console.log(research)
+    let cond, existingResearch = null
+
     if (research.uuid) {
         cond = {
             where: {
@@ -20,39 +20,35 @@ async function createOrUpdate(research) {
         }
     }
     existingResearch = await Research.findOne(cond)
-    existingProject = await Project.findOne({ where: research.Project })
-    if (existingProject)
-        project = existingProject
-    else
-        project = await Project.create(project.Project)
+    console.log(research)
+    if (!existingResearch)
+        existingResearch = await Research.create(research)
 
-
-    if (existingResearch)
-        await Project.update(project, cond)
-    else
-        existingResearch = await Project.create(project)
-
-    research.Authors.forEach(async (author) => {
-        let new_author = await Collaborator.findOne({ where: { author } })
+    await existingResearch.setAuthors([])
+    research.extra.Authors.forEach(async (author) => {
+        let new_author = await Collaborator.findOne({ where: { fullname: author } })
         if (!new_author) {
-            new_author = await Collaborator.create({ author })
+            new_author = await Collaborator.create({ fullname: author })
         }
         await existingResearch.addAuthor(new_author)
     });
 
-    await existingResearch.setProject(project)
+    await existingResearch.setProjects([])
+    research.Projects.forEach(async (project) => {
+        let new_project = await Project.findOne({ where: { uuid: project } })
+        await existingResearch.addProject(new_project)
+    });
 
-    if (research.type == 'Tesis') {
+    await existingResearch.setAdvisors([])
+    research.extra.Advisors.forEach(async (advisor) => {
+        let new_advisor = await Collaborator.findOne({ where: { fullname: advisor } })
+        if (!new_advisor) {
+            new_advisor = await Collaborator.create({ fullname: advisor })
+        }
+        await existingResearch.addAdvisor(new_advisor)
+    });
 
-        research.Advisors.forEach(async (advisor) => {
-            let new_advisor = await Collaborator.findOne({ where: { advisor } })
-            if (!new_advisor) {
-                new_advisor = await Collaborator.create({ advisor })
-            }
-            await existingResearch.addAdvisor(new_advisor)
-        });
-    }
-
+    await existingResearch.setInterestAreas([])
     research.Topics.forEach(async (topic) => {
         let line = await InterestArea.findOne({ where: { topic } })
         if (!line) {
