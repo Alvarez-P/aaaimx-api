@@ -48,6 +48,13 @@ async function createOrUpdate(project) {
 async function getProjects(projects) {
     for (let index = 0; index < projects.length; index++) {
         let coll = projects[index]
+        coll = await getProject(coll)
+    }
+    return projects
+}
+async function getProject(project) {
+    
+        let coll = project
         console.log(coll)
         let responsible = await coll.getResponsible()
         coll.dataValues.responsible = responsible ? responsible.fullname : null
@@ -62,10 +69,11 @@ async function getProjects(projects) {
             interestArea1.push(element.topic)
         });
         coll.dataValues.interest_area = interestArea1
-    }
-    return projects
+    
+    return project
 }
 module.exports = {
     createOrUpdate,
-    getProjects
+    getProjects,
+    getProject
 }

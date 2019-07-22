@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate, getCollaborators } = require('./controllers')
+const { createOrUpdate, getCollaborators, getCollaborator } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -45,7 +45,45 @@ const ERROR_500 = {
  *     {
  *       "error": "InternalServerError"
  *     }
- */
+ */router.get('/', async (req, res, next) => {
+  const { Collaborator } = await connection()
+  let cond = {}
+  console.log(req.query)
+  const offset = parseInt(req.query.offset, 10); // 
+  const limit = parseInt(req.query.limit, 10);
+  if ((offset && limit) || (offset == 0 && limit)) {
+    cond = {
+      where: {},
+      offset,
+      limit
+    }
+  } else {
+    cond = {
+      where: req.query
+    }
+  }
+  if (req.query.datatable) {
+    cond = {
+      where: req.query.query
+    }
+    if (req.query.query.generalSearch || req.query.query.generalSearch === '') {
+      cond = {}
+    }
+  }
+  Collaborator.findAndCountAll(cond).then( async (collaborators) => {
+    const colls = await getCollaborators(collaborators.rows)
+    res.status(200).send({
+      count: collaborators.count,
+      rows: colls
+    });
+  }, err => {
+    console.log(err)
+    res.status(500).send(ERROR_500);
+  })
+
+});
+
+module.exports = router;
 router.get('/', async (req, res, next) => {
   const { Collaborator } = await connection()
   let cond = {}
@@ -116,12 +154,9 @@ module.exports = router;
 router.get('/:uuid', async (req, res, next) => {
   const { Collaborator } = await connection()
   const uuid = req.params.uuid
-  Collaborator.findOne({ where: { uuid } }).then(async (collaborators) => {
-    const colls = await getCollaborators(collaborators.rows)
-    res.status(200).send({
-      count: collaborators.count,
-      rows: colls
-    });
+  Collaborator.findOne({ where: { uuid } }).then(async (collaborator) => {
+    const coll = await getCollaborator(collaborator)
+    res.status(200).send(coll);
   }, err => {
     console.log(err)
     res.status(500).send(ERROR_500);
