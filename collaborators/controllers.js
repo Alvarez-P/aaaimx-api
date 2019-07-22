@@ -65,11 +65,7 @@ async function getCollaborators(collaborators) {
         coll.dataValues.projects = await coll.getProjects();
 
         let researches = await coll.getResearches();
-        let researches1 = await classification(researches)
-        coll.dataValues.r_theses = researches1[0]
-        coll.dataValues.r_publications = researches1[1]
-        coll.dataValues.r_presentation = researches1[2] 
-
+        coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
         let adscription = await coll.getAdscription()
         coll.dataValues.adscription = adscription ? adscription.institute : null
     }

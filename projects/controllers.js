@@ -3,7 +3,7 @@ const classification = require('../researches/classification')
 async function createOrUpdate(project) {
     const { Project, Partner, Collaborator, InterestArea } = await connection()
     let cond, existingProject, existingPartner, partner, in_charge
-    if (project.uuid) { 
+    if (project.uuid) {
         cond = {
             where: {
                 uuid: project.uuid
@@ -26,7 +26,7 @@ async function createOrUpdate(project) {
 
     if (!in_charge)
         in_charge = await Collaborator.create(project.InCharge)
-        
+
     if (existingProject)
         await Project.update(project, cond)
     else
@@ -55,16 +55,12 @@ async function getProjects(projects) {
         coll.dataValues.institute = institute ? institute.institute : null
 
         let researches = await coll.getResearches();
-        let researches1 = await classification(researches)
-        coll.dataValues.r_theses = researches1[0]
-        coll.dataValues.r_publications = researches1[1]
-        coll.dataValues.r_presentation = researches1[2] 
-        
+        coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
         let interestArea = await coll.getInterestAreas();
         let interestArea1 = []
-        interestArea.forEach((element,index, array) => {
+        interestArea.forEach((element, index, array) => {
             interestArea1.push(element.topic)
-          });
+        });
         coll.dataValues.interest_area = interestArea1
     }
     return projects
