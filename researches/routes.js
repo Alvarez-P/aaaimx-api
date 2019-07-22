@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate, getResearches } = require('./controllers')
+const { createOrUpdate, getResearches, getResearch } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -112,12 +112,9 @@ module.exports = router
 router.get('/:uuid', async (req, res, next) => {
   const { Research } = await connection()
   const uuid = req.params.uuid
-  Research.findOne({ where: { uuid } }).then(async (researches) => {
-    const colls = await getResearches(researches.rows)
-    res.status(200).send({
-      count: researches.count,
-      rows: colls
-    });
+  Research.findOne({ where: { uuid } }).then(async (research) => {
+    const coll = await getResearch(research)
+    res.status(200).send(coll);
   }, err => {
     console.log(err)
     res.status(500).send(ERROR_500);
