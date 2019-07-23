@@ -15,7 +15,8 @@ async function createOrUpdate(research) {
     } else {
         cond = {
             where: {
-                title: research.title
+                title: research.title,
+                type: research.type,
             }
         }
     }
