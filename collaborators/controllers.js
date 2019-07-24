@@ -74,6 +74,7 @@ async function getCollaborator(collaborator) {
         let researches = await coll.getResearches();
         coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
         let adscription = await coll.getAdscription()
+        coll.dataValues.directed_theses = await coll.getTheses();
         coll.dataValues.adscription = adscription ? adscription.institute : null
     
     return collaborator
