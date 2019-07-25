@@ -49,9 +49,9 @@ router.get('/', async (req, res, next) => {
 module.exports = router;
 
 router.get('/:uuid', async (req, res, next) => {
-  const { Research } = await connection()
+  const { Project } = await connection()
   const uuid = req.params.uuid
-  Research.findOne({ where: { uuid } }).then(async (project) => {
+  Project.findOne({ where: { uuid } }).then(async (project) => {
     const coll = await getProject(project)
     res.status(200).send(coll);
   }, err => {
