@@ -1,5 +1,7 @@
 const connection = require('../dao/connection')
 const classification = require('../researches/classification')
+const { getResearches } = require('../researches/controllers')
+
 async function createOrUpdate(collaborator) {
     const { Collaborator, Partner, Role } = await connection() // modelos involucrados en el proceso
     let cond, existingCollaborator, existingPartner, partner // inicializar banderas
@@ -57,28 +59,11 @@ async function createOrUpdate(collaborator) {
 async function getCollaborators(collaborators) {
     for (let index = 0; index < collaborators.length; index++) {
         let coll = collaborators[index]
-        coll = await getColl(coll)
+        coll = await getCollaborator(coll)
     }
     return collaborators
 }
 
-async function getColl(collaborator) {
-        let coll = collaborator
-        let roles = await coll.getRoles();
-        coll.dataValues.roles = []
-        roles.forEach((element) => {
-            coll.dataValues.roles.push(element.name)
-        });
-        coll.dataValues.projects = await coll.getProjects();
-
-        let researches = await coll.getResearches();
-        coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
-        let adscription = await coll.getAdscription()
-        coll.dataValues.directed_theses = await coll.getTheses();
-        coll.dataValues.adscription = adscription ? adscription.institute : null
-    
-    return collaborator
-}
 async function getCollaborator(collaborator) {
     let coll = collaborator
     let roles = await coll.getRoles();
@@ -87,38 +72,18 @@ async function getCollaborator(collaborator) {
         coll.dataValues.roles.push(element.name)
     });
     coll.dataValues.projects = await coll.getProjects();
-
+    let researches = await coll.getResearches();
+    let directed_theses = await coll.getTheses()
+    researches.push.apply(researches, directed_theses)
+    //researches = await getResearches(researches)
+    coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
     let adscription = await coll.getAdscription()
     coll.dataValues.adscription = adscription ? adscription.institute : null
-
-return collaborator
-}
-
-async function getResearchesbyColl(collaborator, band){
-    let coll = collaborator
-    let researches = await coll.getResearches();
-    let r = await classification(researches, collaborator)
-    coll.dataValues.theses = r[band]
-    const { Research } = await connection()
-    let lines = [], intA = []
-    let re = r[band]
-    re.forEach(async (element) => {
-        let uuid = element.uuid 
-        let research = await Research.findOne({where: { uuid }})
-        let line = await research.getInterestAreas()
-        
-        line.forEach((element)=>{
-            lines.push(element.topic)
-        })
-        
-    });
-
-    coll.dataValues.lines = lines  
     return collaborator
 }
+
 module.exports = {
     createOrUpdate,
     getCollaborators,
-    getCollaborator,
-    getResearchesbyColl
+    getCollaborator
 }
