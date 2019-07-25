@@ -57,12 +57,12 @@ async function createOrUpdate(collaborator) {
 async function getCollaborators(collaborators) {
     for (let index = 0; index < collaborators.length; index++) {
         let coll = collaborators[index]
-        coll = await getCollaborator(coll)
+        coll = await getColl(coll)
     }
     return collaborators
 }
 
-async function getCollaborator(collaborator) {
+async function getColl(collaborator) {
         let coll = collaborator
         let roles = await coll.getRoles();
         coll.dataValues.roles = []
@@ -79,8 +79,30 @@ async function getCollaborator(collaborator) {
     
     return collaborator
 }
+async function getCollaborator(collaborator) {
+    let coll = collaborator
+    let roles = await coll.getRoles();
+    coll.dataValues.roles = []
+    roles.forEach((element) => {
+        coll.dataValues.roles.push(element.name)
+    });
+    coll.dataValues.projects = await coll.getProjects();
+
+    let adscription = await coll.getAdscription()
+    coll.dataValues.adscription = adscription ? adscription.institute : null
+
+return collaborator
+}
+
+async function getResearchesbyColl(collaborator){
+    let coll = collaborator
+    let researches = await coll.getResearches();
+    coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
+    return collaborator
+}
 module.exports = {
     createOrUpdate,
     getCollaborators,
-    getCollaborator
+    getCollaborator,
+    getResearchesbyColl
 }

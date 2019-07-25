@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createOrUpdate, getCollaborators, getCollaborator } = require('./controllers')
+const { createOrUpdate, getCollaborators, getCollaborator, getResearchesbyColl } = require('./controllers')
 const connection = require('../dao/connection')
 const ERROR_404 = {
   error: "ResourceNotFound"
@@ -156,6 +156,23 @@ router.get('/:uuid', async (req, res, next) => {
   const uuid = req.params.uuid
   Collaborator.findOne({ where: { uuid } }).then(async (collaborator) => {
     const coll = await getCollaborator(collaborator)
+    res.status(200).send(coll);
+  }, err => {
+    console.log(err)
+    res.status(500).send(ERROR_500);
+  })
+
+});
+
+module.exports = router
+
+
+
+router.get('/:uuid/researches', async (req, res, next) => {
+  const { Collaborator } = await connection()
+  const uuid = req.params.uuid
+  Collaborator.findOne({ where: { uuid } }).then(async (collaborator) => {
+    const coll = await getResearchesbyColl(collaborator)
     res.status(200).send(coll);
   }, err => {
     console.log(err)
