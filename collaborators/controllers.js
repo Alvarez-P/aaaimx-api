@@ -94,10 +94,26 @@ async function getCollaborator(collaborator) {
 return collaborator
 }
 
-async function getResearchesbyColl(collaborator){
+async function getResearchesbyColl(collaborator, band){
     let coll = collaborator
     let researches = await coll.getResearches();
-    coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
+    let r = await classification(researches, collaborator)
+    coll.dataValues.theses = r[band]
+    const { Research } = await connection()
+    let lines = [], intA = []
+    let re = r[band]
+    re.forEach(async (element) => {
+        let uuid = element.uuid 
+        let research = await Research.findOne({where: { uuid }})
+        let line = await research.getInterestAreas()
+        
+        line.forEach((element)=>{
+            lines.push(element.topic)
+        })
+        
+    });
+
+    coll.dataValues.lines = lines  
     return collaborator
 }
 module.exports = {
