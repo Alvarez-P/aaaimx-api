@@ -52,6 +52,7 @@ async function getProjects(projects) {
     }
     return projects
 }
+
 async function getProject(project) {
     
         let coll = project
@@ -60,19 +61,26 @@ async function getProject(project) {
         coll.dataValues.responsible = responsible ? responsible.fullname : null
         let institute = await coll.getInstitute()
         coll.dataValues.institute = institute ? institute.institute : null
-
         let researches = await coll.getResearches();
         coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
-        let interestArea = await coll.getInterestAreas();
-        let interestArea1 = []
-        interestArea.forEach((element, index, array) => {
-            interestArea1.push(element.topic)
+        let lines = await coll.getInterestAreas();
+        let topics = []
+        lines.forEach((element) => {
+            topics.push(element.topic)
         });
-        coll.dataValues.interest_area = interestArea1
-    
+        coll.dataValues.lines = topics
     return project
 }
+
+async function getCollaboratorsByProject(project) {
+    let researches = await project.getResearches();
+    researches.forEach(element => {
+        console.log(element)
+    });
+}
+
 module.exports = {
+    getCollaboratorsByProject,
     createOrUpdate,
     getProjects,
     getProject

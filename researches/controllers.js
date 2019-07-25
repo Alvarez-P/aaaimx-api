@@ -15,7 +15,8 @@ async function createOrUpdate(research) {
     } else {
         cond = {
             where: {
-                title: research.title
+                title: research.title,
+                type: research.type,
             }
         }
     }
@@ -67,13 +68,28 @@ async function getResearches(researches) {
     return researches
 }
 
+function orderAuthors(Authors, array) {
+    array.forEach((fullname, i, arr) => {
+        Authors.forEach(el => {
+            if (el.dataValues.fullname == fullname) {
+                arr[i] = el
+            }
+        });
+    });
+    return array
+}
+
+
 async function getResearch(research) {
-        let coll = research
-        coll.dataValues.projects = await coll.getProjects();
-        coll.dataValues.authors = await coll.getAuthors();
-        coll.dataValues.advisors = await coll.getAdvisors();
-        coll.dataValues.lines = await coll.getInterestAreas();
-    
+    research.dataValues.projects = await research.getProjects();
+    research.dataValues.authors = await research.getAuthors();
+    research.dataValues.advisors = await research.getAdvisors();
+    research.dataValues.lines = await research.getInterestAreas();
+    let authors = research.dataValues.authors
+    let advisors = research.dataValues.advisors
+    let extra = JSON.parse(research.dataValues.extra)
+    research.dataValues.authors = orderAuthors(authors, extra.Authors)
+    research.dataValues.advisors = orderAuthors(advisors, extra.Advisors)
     return research
 }
 module.exports = {
