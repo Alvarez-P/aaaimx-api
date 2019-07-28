@@ -64,11 +64,7 @@ async function getProject(project) {
         let researches = await coll.getResearches();
         coll.dataValues = Object.assign({}, coll.dataValues, await classification(researches))
         let lines = await coll.getInterestAreas();
-        let topics = []
-        lines.forEach((element) => {
-            topics.push(element.topic)
-        });
-        coll.dataValues.lines = topics
+        coll.dataValues.lines = lines.map(element => element.topic);
     return project
 }
 
