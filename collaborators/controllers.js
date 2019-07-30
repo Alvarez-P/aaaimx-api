@@ -67,10 +67,7 @@ async function getCollaborators(collaborators) {
 async function getCollaborator(collaborator) {
     let coll = collaborator
     let roles = await coll.getRoles();
-    coll.dataValues.roles = []
-    roles.forEach((element) => {
-        coll.dataValues.roles.push(element.name)
-    });
+    coll.dataValues.roles = roles.map(element => element.name);
     coll.dataValues.projects = await coll.getProjects();
     let researches = await coll.getResearches();
     let directed_theses = await coll.getTheses()

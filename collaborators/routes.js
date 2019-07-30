@@ -162,51 +162,6 @@ router.get('/:uuid', async (req, res, next) => {
 
 module.exports = router
 
-
-
-router.get('/:uuid/theses', async (req, res, next) => {
-  const { Collaborator } = await connection()
-  const uuid = req.params.uuid
-  Collaborator.findOne({ where: { uuid } }).then(async (collaborator) => {
-    const coll = await getResearchesbyColl(collaborator, 'theses')
-    res.status(200).send(coll);
-  }, err => {
-    console.log(err)
-    res.status(500).send(ERROR_500);
-  })
-});
-
-module.exports = router
-
-router.get('/:uuid/publications', async (req, res, next) => {
-  const { Collaborator } = await connection()
-  const uuid = req.params.uuid
-  Collaborator.findOne({ where: { uuid } }).then(async (collaborator) => {
-    const coll = await getResearchesbyColl(collaborator, 'publications')
-    res.status(200).send(coll);
-  }, err => {
-    console.log(err)
-    res.status(500).send(ERROR_500);
-  })
-
-});
-
-module.exports = router
-
-router.get('/:uuid/presentations', async (req, res, next) => {
-  const { Collaborator } = await connection()
-  const uuid = req.params.uuid
-  Collaborator.findOne({ where: { uuid } }).then(async (collaborator) => {
-    const coll = await getResearchesbyColl(collaborator, 'presentations')
-    res.status(200).send(coll);
-  }, err => {
-    console.log(err)
-    res.status(500).send(ERROR_500);
-  })
-
-});
-
-module.exports = router
 /**
  * @api {POST} /collaborators/ Create new Collaborator
  * @apiName CreateCollaborator

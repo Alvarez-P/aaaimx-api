@@ -84,7 +84,8 @@ async function getResearch(research) {
     research.dataValues.projects = await research.getProjects();
     research.dataValues.authors = await research.getAuthors();
     research.dataValues.advisors = await research.getAdvisors();
-    research.dataValues.lines = await research.getInterestAreas();
+    let lines = await research.getInterestAreas();
+    research.dataValues.lines = lines.map(line => line.topic)
     let authors = research.dataValues.authors
     let advisors = research.dataValues.advisors
     let extra = JSON.parse(research.dataValues.extra)

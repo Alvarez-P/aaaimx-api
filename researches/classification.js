@@ -1,12 +1,10 @@
 'use strict'
 async function classification(researches) {
-    let t = ["thesis", "tesis"], pu = ["publication", "publicacion", "publicación"], pre = ["presentation", "presentacion", "presentación"]
-    let theses = [], publications = [], presentations = []
-    researches.forEach(async (element) => {
-        if (t.includes(element.type.toLowerCase())) theses.push(element)
-        if (pu.includes(element.type.toLowerCase())) publications.push(element)
-        if (pre.includes(element.type.toLowerCase())) presentations.push(element)
-    });
+    let t = ["thesis", "tesis"], pu = ["publication", "publicacion", "publicación"], pre = ["presentation", "ponencia", "ponencia"]
+    let theses = researches.filter(r => t.includes(r.type.toLowerCase()))
+    let publications = researches.filter(r => pu.includes(r.type.toLowerCase()))
+    let presentations = researches.filter(r => pre.includes(r.type.toLowerCase()))
+    console.log('here')
     return {
         theses,
         publications,
